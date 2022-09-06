@@ -34,32 +34,32 @@ public class AdsController {
 
     @DeleteMapping("/{ad_pk}/comment/{id}")
     public ResponseEntity<?> deleteAdsComment(@PathVariable Long ad_pk, @PathVariable Long id){
-        return ResponseEntity.ok("Delete Ads comment pk = " + ad_pk + "; comment id = " + id);
+        return ResponseEntity.ok("Delete Ads comment pk = " + ad_pk + "; comment pk = " + id);
     }
 
     @GetMapping("/{ad_pk}/comment/{id}")
     public ResponseEntity<?> getAdsComment(@PathVariable Long ad_pk, @PathVariable Long id){
-        return ResponseEntity.ok("Get Ads comment pk = " + ad_pk + "; comment id = " + id);
+        return ResponseEntity.ok("Get Ads comment pk = " + ad_pk + "; comment pk = " + id);
     }
 
     @PatchMapping("/{ad_pk}/comment/{id}")
     public ResponseEntity<?> updateAdsComment(@PathVariable Long ad_pk, @PathVariable Long id){
-        return ResponseEntity.ok("Update Ads comment pk = " + ad_pk + "; comment id = " + id);
+        return ResponseEntity.ok("Update Ads comment pk = " + ad_pk + "; comment pk = " + id);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> removeAds(@PathVariable Long id){
-        return ResponseEntity.ok("Remove Ads id = " + id);
+        return ResponseEntity.ok("Remove Ads pk = " + id);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getAds(@PathVariable Long id){
-        return ResponseEntity.ok("Get Ads id = " + id);
+        return ResponseEntity.ok("Get Ads pk = " + id);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateAds(@PathVariable Long id){
-        return ResponseEntity.ok("Update Ads id = " + id);
+        return ResponseEntity.ok("Update Ads pk = " + id);
     }
 
 }
