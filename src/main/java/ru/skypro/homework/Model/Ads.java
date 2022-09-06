@@ -1,6 +1,7 @@
 package ru.skypro.homework.Model;
 
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -22,6 +23,8 @@ public class Ads {
 
     private String description;
 
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
     private String image;
 
     private Float price;

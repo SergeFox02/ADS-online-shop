@@ -38,13 +38,11 @@ public class AuthServiceImpl implements AuthService {
         if (manager.userExists(registerReq.getUsername())) {
             return false;
         }
-        manager.createUser(
-                User.withDefaultPasswordEncoder()
-                        .password(registerReq.getPassword())
-                        .username(registerReq.getUsername())
-                        .roles(role.name())
-                        .build()
-        );
+        manager.createUser(User.builder()
+                .password(registerReq.getPassword())
+                .username(registerReq.getUsername())
+                .roles(role.name())
+                .build());
         return true;
     }
 }
