@@ -40,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
+        if (!userService.isPresent(userName)) {
             return false;
         }
         UserDetails userDetails = userService.loadUserByUsername(userName);
