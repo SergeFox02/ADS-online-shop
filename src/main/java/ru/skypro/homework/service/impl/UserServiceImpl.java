@@ -32,13 +32,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findUserByEmail(email);
-
-        if (user == null) {
+        User user = new User();
+        if (userRepository.findUserByEmail(email).isPresent()) {
+            user = userRepository.findUserByEmail(email).get();
+        }
+        else {
             throw new UsernameNotFoundException("User not found");
         }
 
         return user;
+    }
+
+    @Override
+    public Optional<User> findUserByEmail(String email) {
+
+        return userRepository.findUserByEmail(email);
     }
 
     @Override
@@ -54,14 +62,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean saveUser(User user) {
-        User userFromDB = userRepository.findUserByEmail(user.getUsername());
 
-        if (userFromDB != null) {
+        if (isPresent(user.getUsername())) {
             return false;
+        } else {
+            user.setPassword(encoder.encode(user.getPassword()));
+            userRepository.saveAndFlush(user);
         }
 
-        user.setPassword(encoder.encode(user.getPassword()));
-        userRepository.save(user);
         return true;
     }
 
@@ -74,4 +82,8 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    @Override
+    public boolean isPresent(String username) {
+        return userRepository.findUserByEmail(username).isPresent();
+    }
 }
