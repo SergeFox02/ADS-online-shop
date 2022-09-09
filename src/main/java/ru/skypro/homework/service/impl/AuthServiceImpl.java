@@ -8,6 +8,7 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
 @Service
@@ -17,9 +18,12 @@ public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder encoder;
 
-    public AuthServiceImpl(UserDetailsManager manager) {
+    private final UserRepository userRepository;
+
+    public AuthServiceImpl(UserDetailsManager manager, UserRepository userRepository) {
         this.manager = manager;
         this.encoder = new BCryptPasswordEncoder();
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -43,6 +47,7 @@ public class AuthServiceImpl implements AuthService {
                 .username(registerReq.getUsername())
                 .roles(role.name())
                 .build());
+
         return true;
     }
 }
