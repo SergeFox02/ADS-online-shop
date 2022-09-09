@@ -201,7 +201,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: id
+      - description: pk
         in: path
         name: id
         required: true
@@ -231,7 +231,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: id
+      - description: pk
         in: path
         name: id
         required: true
@@ -267,7 +267,7 @@ paths:
         required: true
         schema:
           type: string
-      - description: id
+      - description: pk
         in: path
         name: id
         required: true
@@ -307,7 +307,7 @@ paths:
     delete:
       operationId: removeAdsUsingDELETE
       parameters:
-      - description: id
+      - description: pk
         in: path
         name: id
         required: true
@@ -331,7 +331,7 @@ paths:
     get:
       operationId: getAdsUsingGET
       parameters:
-      - description: id
+      - description: pk
         in: path
         name: id
         required: true
@@ -361,7 +361,7 @@ paths:
     patch:
       operationId: updateAdsUsingPATCH
       parameters:
-      - description: id
+      - description: pk
         in: path
         name: id
         required: true
@@ -595,7 +595,7 @@ paths:
     get:
       operationId: getUserUsingGET
       parameters:
-      - description: id
+      - description: pk
         in: path
         name: id
         required: true

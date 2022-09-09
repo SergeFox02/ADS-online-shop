@@ -30,6 +30,6 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable Long id){
-        return ResponseEntity.ok("Get users with id = " + id);
+        return ResponseEntity.ok("Get users with pk = " + id);
     }
 }
