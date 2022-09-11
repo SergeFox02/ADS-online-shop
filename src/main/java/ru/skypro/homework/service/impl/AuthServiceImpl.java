@@ -6,11 +6,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-//import ru.skypro.homework.Model.User;
 import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.mapper.impl.RegisterReqToUserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.UserService;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -21,21 +23,30 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
 
-    public AuthServiceImpl(UserDetailsManager manager, UserRepository userRepository) {
+    private final UserService userService;
+
+    private final UserMapper mapper;
+
+    public AuthServiceImpl(UserDetailsManager manager,
+                           UserRepository userRepository,
+                           UserService userService,
+                           UserMapper mapper) {
         this.manager = manager;
         this.encoder = new BCryptPasswordEncoder();
         this.userRepository = userRepository;
+        this.userService = userService;
+        this.mapper = mapper;
     }
 
     @Override
     public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
+        if (!userService.isPresent(userName)) {
             return false;
         }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
+        UserDetails userDetails = userService.loadUserByUsername(userName);
         String encryptedPassword = userDetails.getPassword();
-        String encryptedPasswordWithoutEncryptionType = encryptedPassword.substring(8);
-        return encoder.matches(password, encryptedPasswordWithoutEncryptionType);
+//        String encryptedPasswordWithoutEncryptionType = encryptedPassword.substring(8);
+        return encoder.matches(password, encryptedPassword);
     }
 
     @Override
@@ -43,27 +54,11 @@ public class AuthServiceImpl implements AuthService {
         if (manager.userExists(registerReq.getUsername())) {
             return false;
         }
-        manager.createUser(User.builder()
-                .password(registerReq.getPassword())
-                .username(registerReq.getUsername())
-                .roles(role.name())
-                .build());
+        mapper.regReqToUserMapping(registerReq, role);
+
+        manager.createUser(mapper.regReqToUserMapping(registerReq, role));
 
 
-        ru.skypro.homework.Model.User newUser = new ru.skypro.homework.Model.User(
-                registerReq.getUsername(),
-                registerReq.getPassword(),
-                registerReq.getFirstName(),
-                registerReq.getLastName(),
-                registerReq.getPhone()
-        );
-
-
-        newUser.setFirstName("FirstName");
-        newUser.setLastName("lastName");
-        newUser.setPhone("+79999999999");
-
-        userRepository.save(newUser);
         return true;
     }
 }
