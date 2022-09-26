@@ -1,5 +1,7 @@
 package ru.skypro.homework.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +19,8 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -62,15 +66,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean saveUser(User user) {
-
         if (isPresent(user.getUsername())) {
+            logger.info("User is present {}", user);
             return false;
         } else {
             user.setPassword(encoder.encode(user.getPassword()));
             userRepository.saveAndFlush(user);
+            logger.info("Save user to database {}", user);
+            return true;
         }
-
-        return true;
     }
 
     @Override

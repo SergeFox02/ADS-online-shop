@@ -1,12 +1,13 @@
 package ru.skypro.homework.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import ru.skypro.homework.Model.User;
-import ru.skypro.homework.dto.LoginReq;
 import ru.skypro.homework.dto.RegisterReq;
-import ru.skypro.homework.dto.Role;
 
+@Mapper(componentModel = "spring")
 public interface UserMapper {
-    User regReqToUserMapping(RegisterReq registerReq, Role role);
 
-    User loginReqToUserMapping(LoginReq loginReq);
+    @Mapping(source = "username", target = "email")
+    User toUser(RegisterReq registerReq);
 }
