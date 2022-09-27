@@ -56,13 +56,12 @@ public class AuthServiceImpl implements AuthService {
         if (manager.userExists(registerReq.getUsername())) {
             return false;
         }
-
         registerReq.setRole(Role.USER);
         User user = mapper.toUser(registerReq);
         mapper.toUser(registerReq);
-        logger.info("Map user {}", user);
-        userService.saveUser(user);
-        logger.info("call createUser");
+        if (userService.saveUser(user)) {
+            logger.info("User saved {}", user);
+        }
         manager.createUser(user);
         return true;
     }
