@@ -31,6 +31,9 @@ public class User implements UserDetails {
     @Column
     private String phone;
 
+
+//    private boolean enabled;
+
     @Column
     @Enumerated(value = EnumType.STRING)
     private Role role;

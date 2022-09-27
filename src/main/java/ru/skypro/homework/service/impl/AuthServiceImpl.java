@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.mapper.UserMapper;
-import ru.skypro.homework.mapper.impl.RegisterReqToUserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UserService;
@@ -45,7 +44,6 @@ public class AuthServiceImpl implements AuthService {
         }
         UserDetails userDetails = userService.loadUserByUsername(userName);
         String encryptedPassword = userDetails.getPassword();
-//        String encryptedPasswordWithoutEncryptionType = encryptedPassword.substring(8);
         return encoder.matches(password, encryptedPassword);
     }
 
@@ -60,5 +58,10 @@ public class AuthServiceImpl implements AuthService {
 
 
         return true;
+    }
+
+    @Override
+    public boolean changePassword(String username, String oldPassword, String newPassword) {
+        return false;
     }
 }

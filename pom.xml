@@ -15,6 +15,7 @@
     <description>homework</description>
     <properties>
         <java.version>11</java.version>
+        <org.mapstruct.version>1.5.2.Final</org.mapstruct.version>
     </properties>
     <dependencies>
         <dependency>
@@ -52,7 +53,7 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>4.15.0</version>
+            <version>4.16.1</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
@@ -94,14 +95,35 @@
                     <target>1.8</target>
                     <annotationProcessorPaths>
                         <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.20</version>
+                        </path>
+                        <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
                             <version>1.5.2.Final</version>
                         </path>
                     </annotationProcessorPaths>
+                    <showWarnings>true</showWarnings>
+                    <compilerArgs>
+                    <arg>
+                        -Amapstruct.suppressGeneratorTimestamp=true
+                    </arg>
+                    <arg>
+                    -Amapstruct.suppressGeneratorVersionInfoComment=true
+                    </arg>
+                    <arg>
+                    -Amapstruct.verbose=true
+                    </arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+
+        </build>
+
+
+
 
 </project>

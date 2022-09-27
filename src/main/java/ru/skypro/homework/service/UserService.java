@@ -23,4 +23,6 @@ public interface UserService extends UserDetailsService {
 
     boolean isPresent(String username);
 
+    User updateUser(User user);
+
 }

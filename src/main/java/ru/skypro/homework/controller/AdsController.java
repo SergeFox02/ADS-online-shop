@@ -2,11 +2,28 @@ package ru.skypro.homework.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.Model.User;
+import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.CommentService;
+import ru.skypro.homework.service.PictureService;
 
-@CrossOrigin(value = "http://localhost:3000")
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/ads")
 public class AdsController {
+
+    private final CommentService commentService;
+
+    private final AdsService adsService;
+
+    private final PictureService pictureService;
+
+    public AdsController(CommentService commentService, AdsService adsService, PictureService pictureService) {
+        this.commentService = commentService;
+        this.adsService = adsService;
+        this.pictureService = pictureService;
+    }
 
     @GetMapping
     public ResponseEntity<?> getAllAds(){
@@ -14,7 +31,9 @@ public class AdsController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addAds(){
+    public ResponseEntity<?> addAds(String title, MultipartFile image, float price, String description, User author){
+        String imagePath = pictureService.saveAdsImage(author, image);
+        adsService.createAd(title, description, imagePath, price, author);
         return ResponseEntity.ok("Add new ads");
     }
 

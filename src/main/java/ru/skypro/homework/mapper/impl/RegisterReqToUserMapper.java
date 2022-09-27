@@ -5,6 +5,7 @@ import ru.skypro.homework.Model.User;
 import ru.skypro.homework.dto.LoginReq;
 import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
@@ -49,6 +50,15 @@ public class RegisterReqToUserMapper implements UserMapper {
             userService.saveUser(user);
         }
         return user;
+    }
+
+    public UserDto userToDtoMapper(User user) {
+        UserDto dto = new UserDto();
+        dto.setUsername(user.getUsername());
+        dto.setPhone(user.getPhone());
+        dto.setFirstName(user.getFirstName());
+        dto.setLastName(user.getLastName());
+        return dto;
     }
 
     @Override

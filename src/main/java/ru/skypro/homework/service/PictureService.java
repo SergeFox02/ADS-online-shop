@@ -7,7 +7,7 @@ public interface PictureService {
 
     boolean saveAvatar(User user, MultipartFile avatar);
 
-    boolean saveAdsImage(User user, MultipartFile image);
+    String saveAdsImage(User user, MultipartFile image);
 
     MultipartFile getImage(String filepath);
 

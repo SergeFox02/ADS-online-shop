@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.stereotype.Service;
 import ru.skypro.homework.Model.Comment;
 import ru.skypro.homework.Model.User;
 import ru.skypro.homework.service.CommentService;
@@ -7,6 +8,7 @@ import ru.skypro.homework.service.CommentService;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+@Service
 public class CommentServiceImpl implements CommentService {
 
     @Override
