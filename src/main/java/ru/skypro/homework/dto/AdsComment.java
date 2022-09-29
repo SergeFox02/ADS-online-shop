@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 @Data
 public class AdsComment {
 
-    private Long author;
     private Long pk;
-    private LocalDateTime createAt;
+    private Long authorId;
+    private LocalDateTime dateTime;
     private String text;
 
 }
