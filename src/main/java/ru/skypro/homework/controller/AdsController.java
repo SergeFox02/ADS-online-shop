@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,8 @@ import ru.skypro.homework.Model.Ads;
 import ru.skypro.homework.dto.AdsComment;
 import ru.skypro.homework.dto.CreateAds;
 import ru.skypro.homework.dto.FullAds;
+import ru.skypro.homework.service.AdsService;
+
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -18,6 +22,13 @@ import ru.skypro.homework.dto.FullAds;
 public class AdsController {
 
     private final String TAG_ADS_CONTROLLER = "Объявления";
+    Logger logger = LoggerFactory.getLogger(AdsController.class);
+
+    private final AdsService adsService;
+
+    public AdsController(AdsService adsService) {
+        this.adsService = adsService;
+    }
 
     @Operation(
             summary = "getAllAds",
@@ -47,7 +58,8 @@ public class AdsController {
     )
     @GetMapping
     public ResponseEntity<?> getAllAds(){
-        return ResponseEntity.ok("Get All ads");
+        logger.info("Call getAllAds");
+        return ResponseEntity.ok(adsService.getAllAds());
     }
 
     @Operation(
