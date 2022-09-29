@@ -27,7 +27,7 @@ public class Ads {
     @Type(type = "org.hibernate.type.TextType")
     private String image;
 
-    private Float price;
+    private Double price;
 
     @Transient
     @OneToMany(mappedBy = "ads")
@@ -42,12 +42,12 @@ public class Ads {
         if (this == o) return true;
         if (!(o instanceof Ads)) return false;
         Ads ads = (Ads) o;
-        return getPk().equals(ads.getPk()) && getTitle().equals(ads.getTitle()) && getDescription().equals(ads.getDescription()) && Objects.equals(getImage(), ads.getImage()) && Objects.equals(getPrice(), ads.getPrice());
+        return getPk().equals(ads.getPk());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPk(), getTitle(), getDescription(), getImage(), getPrice());
+        return Objects.hash(getPk());
     }
 
     @Override
@@ -56,7 +56,6 @@ public class Ads {
                 "pk=" + pk +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", image='" + image + '\'' +
                 ", price=" + price +
                 ", comments=" + comments +
                 ", author=" + author +
