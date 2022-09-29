@@ -1,7 +1,6 @@
 package ru.skypro.homework.Model;
 
 import lombok.*;
-import org.springframework.context.annotation.EnableMBeanExport;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -36,12 +35,12 @@ public class Comment {
         if (this == o) return true;
         if (!(o instanceof Comment)) return false;
         Comment comment1 = (Comment) o;
-        return getPk().equals(comment1.getPk()) && getCreatedAt().equals(comment1.getCreatedAt()) && getText().equals(comment1.getText()) && Objects.equals(getAds(), comment1.getAds()) && getAuthor().equals(comment1.getAuthor());
+        return getPk().equals(comment1.getPk());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPk(), getCreatedAt(), getText(), getAds(), getAuthor());
+        return Objects.hash(getPk());
     }
 
     @Override
