@@ -7,6 +7,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.Model.Ads;
+import ru.skypro.homework.dto.AdsComment;
+import ru.skypro.homework.dto.CreateAds;
+import ru.skypro.homework.dto.FullAds;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -50,8 +54,8 @@ public class AdsController {
             summary = "addAds",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE
-//                            schema = @Schema(implementation = CreateAds.class)
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = CreateAds.class)
                     )
             ),
             responses = {
@@ -148,8 +152,8 @@ public class AdsController {
             summary = "addAdsComments",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE
-//                            schema = @Schema(implementation = AdsComment.class)
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = AdsComment.class)
                     )
             ),
             responses = {
@@ -157,8 +161,8 @@ public class AdsController {
                             responseCode = "200",
                             description = "OK",
                             content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-//                                    schema = @Schema(implementation = AdsComment.class)
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = AdsComment.class)
                             )
                     )
             },
@@ -195,8 +199,8 @@ public class AdsController {
                             responseCode = "200",
                             description = "OK",
                             content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-//                                    schema = @Schema(implementation = AdsComment.class)
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = AdsComment.class)
                             )
                     )
             },
@@ -214,8 +218,8 @@ public class AdsController {
                             responseCode = "200",
                             description = "OK",
                             content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-//                                    schema = @Schema(implementation = AdsComment.class)
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = AdsComment.class)
                             )
                     )
             },
@@ -249,8 +253,8 @@ public class AdsController {
                             responseCode = "200",
                             description = "OK",
                             content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-//                                    schema = @Schema(implementation = FullAds.class)
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = FullAds.class)
                             )
                     )
             },
@@ -268,8 +272,8 @@ public class AdsController {
                             responseCode = "200",
                             description = "OK",
                             content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-//                                    schema = @Schema(implementation = Ads.class)
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Ads.class)
                             )
                     )
             },

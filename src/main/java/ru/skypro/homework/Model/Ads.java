@@ -27,7 +27,7 @@ public class Ads {
     @Type(type = "org.hibernate.type.TextType")
     private String image;
 
-    private Float price;
+    private Double price;
 
     @Transient
     @OneToMany(mappedBy = "ads")
