@@ -1,6 +1,5 @@
 package ru.skypro.homework.Model;
 
-import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.skypro.homework.dto.Role;
@@ -152,11 +151,11 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return Objects.equals(getId(), user.getId()) && getEmail().equals(user.getEmail()) && getPhone().equals(user.getPhone()) && getRole() == user.getRole();
+        return Objects.equals(getId(), user.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getEmail(), getPhone(), getRole());
+        return Objects.hash(getId());
     }
 }
