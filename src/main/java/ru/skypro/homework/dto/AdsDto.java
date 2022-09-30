@@ -10,6 +10,6 @@ public class AdsDto {
     private String title;
     private String description;
     private String image;
-    private Double price;
+    private Long price;
 
 }

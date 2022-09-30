@@ -45,3 +45,6 @@ CREATE TABLE image(
                        data         bytea       NOT NULL,
                        ads_id       bigint      NOT NULL    UNIQUE
 );
+
+-- changeSet Serge:5
+ALTER TABLE ads ALTER COLUMN price TYPE bigint;

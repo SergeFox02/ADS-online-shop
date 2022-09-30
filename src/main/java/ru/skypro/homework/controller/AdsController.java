@@ -6,8 +6,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springdoc.core.SecurityService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.Model.Ads;
 import ru.skypro.homework.dto.AdsComment;
@@ -16,13 +19,18 @@ import ru.skypro.homework.dto.FullAds;
 import ru.skypro.homework.service.AdsService;
 
 
-@CrossOrigin(value = "http://localhost:3000")
+@CrossOrigin(value = "http://localhost:3000", allowCredentials = "true", allowedHeaders = "*",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
 @RestController
 @RequestMapping("/ads")
 public class AdsController {
 
     private final String TAG_ADS_CONTROLLER = "Объявления";
     Logger logger = LoggerFactory.getLogger(AdsController.class);
+
+    @Autowired
+    private SecurityService securityService;
 
     private final AdsService adsService;
 

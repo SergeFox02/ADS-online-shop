@@ -34,4 +34,9 @@ public class AdsServiceImpl implements AdsService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Ads findAds(Long id) {
+        return null;
+    }
+
 }
