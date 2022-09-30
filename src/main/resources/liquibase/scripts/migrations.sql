@@ -35,3 +35,13 @@ CREATE TABLE comments
     ads                 bigint NOT NULL references ads(pk),
     created_at          timestamp NOT NULL
 );
+
+-- changeSet Serge:4
+CREATE TABLE image(
+                       id           bigserial   NOT NULL    PRIMARY KEY,
+                       file_path    text        NOT NULL    UNIQUE,
+                       file_size    bigint      NOT NULL,
+                       media_type   text        NOT NULL,
+                       data         bytea       NOT NULL,
+                       ads_id       bigint      NOT NULL    UNIQUE
+);
