@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.model.dto.ResponseWrapperAds;
 import ru.skypro.homework.model.entity.Ads;
 import ru.skypro.homework.model.dto.AdsDto;
 import ru.skypro.homework.model.mapper.AdsMapper;
@@ -27,11 +28,11 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public Collection<AdsDto> getAllAds() {
-        Collection<Ads> allAds = adsRepository.findAll();
-        return allAds.stream()
+    public ResponseWrapperAds getAllAds() {
+        Collection<AdsDto> adsDtoCollection = adsRepository.findAll().stream()
                 .map(s -> adsMapper.toAdsDto(s))
                 .collect(Collectors.toList());
+        return new ResponseWrapperAds(adsDtoCollection.size(), adsDtoCollection);
     }
 
     @Override

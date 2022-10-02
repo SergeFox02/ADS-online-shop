@@ -11,6 +11,6 @@ public interface AdsMapper {
 
     AdsMapper INSTANCE = Mappers.getMapper(AdsMapper.class );
 
-    @Mapping(source = "pk", target = "authorId")
+    @Mapping(source = "id", target = "authorId")
     AdsDto toAdsDto(Ads ads);
 }

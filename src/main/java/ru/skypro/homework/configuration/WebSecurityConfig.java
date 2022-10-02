@@ -22,7 +22,7 @@ public class WebSecurityConfig {
             "/webjars/**",
             "/login",
             "/register",
-            "/ads"
+            "/ads/**"
     };
 
     @Bean
@@ -43,7 +43,6 @@ public class WebSecurityConfig {
                                 authz
                                         .mvcMatchers(AUTH_WHITELIST).permitAll()
 //                                .mvcMatchers("/ads/**", "/users/**").authenticated()
-
                 )
                 .cors().disable()
                 .httpBasic(withDefaults());

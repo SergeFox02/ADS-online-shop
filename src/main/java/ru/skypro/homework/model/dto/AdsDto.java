@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class AdsDto {
 
-    private Long pk;
+    private Long id;
     private Long authorId;
     private String title;
     private String description;
