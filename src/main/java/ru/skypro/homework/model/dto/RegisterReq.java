@@ -1,6 +1,7 @@
 package ru.skypro.homework.model.dto;
 
 import lombok.Data;
+import ru.skypro.homework.model.entity.Role;
 
 @Data
 public class RegisterReq {
