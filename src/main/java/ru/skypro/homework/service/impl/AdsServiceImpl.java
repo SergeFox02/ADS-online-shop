@@ -2,9 +2,9 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.Model.Ads;
-import ru.skypro.homework.dto.AdsDto;
-import ru.skypro.homework.mapper.AdsMapper;
+import ru.skypro.homework.model.entity.Ads;
+import ru.skypro.homework.model.dto.AdsDto;
+import ru.skypro.homework.model.mapper.AdsMapper;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.service.AdsService;
 

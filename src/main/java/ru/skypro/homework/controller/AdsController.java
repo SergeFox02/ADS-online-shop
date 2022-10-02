@@ -12,10 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.Model.Ads;
-import ru.skypro.homework.dto.AdsComment;
-import ru.skypro.homework.dto.CreateAds;
-import ru.skypro.homework.dto.FullAds;
+import ru.skypro.homework.model.entity.Ads;
+import ru.skypro.homework.model.dto.AdsComment;
+import ru.skypro.homework.model.dto.CreateAds;
+import ru.skypro.homework.model.dto.FullAds;
 import ru.skypro.homework.service.AdsService;
 
 

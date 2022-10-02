@@ -1,4 +1,4 @@
-package ru.skypro.homework.Model;
+package ru.skypro.homework.model.entity;
 
 import javax.persistence.*;
 import java.util.Objects;

@@ -1,7 +1,7 @@
 package ru.skypro.homework.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.skypro.homework.Model.Image;
+import ru.skypro.homework.model.entity.Image;
 
 import java.util.Optional;
 

@@ -5,8 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.Model.Ads;
-import ru.skypro.homework.Model.Image;
+import ru.skypro.homework.model.entity.Image;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.ImageService;
@@ -18,8 +17,6 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 @Transactional

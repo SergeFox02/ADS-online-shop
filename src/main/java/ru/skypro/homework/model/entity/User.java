@@ -1,8 +1,8 @@
-package ru.skypro.homework.Model;
+package ru.skypro.homework.model.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.model.dto.Role;
 
 import javax.persistence.*;
 import java.util.Collection;
