@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.model.dto.NewPassword;
 import ru.skypro.homework.model.entity.User;
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -137,8 +138,8 @@ public class UserController {
             description = "newPassword",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE
-//                            schema = @Schema(implementation = NewPassword.class)
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = NewPassword.class)
                     )
             ),
             responses = {
@@ -146,8 +147,8 @@ public class UserController {
                             responseCode = "200",
                             description = "OK",
                             content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-//                                    schema = @Schema(implementation = NewPassword.class)
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = NewPassword.class)
                             )
                     ),
                     @ApiResponse(

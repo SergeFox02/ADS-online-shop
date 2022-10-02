@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class AdsComment {
 
     private Long pk;
-    private Long authorId;
+    private Long author;
     private LocalDateTime dateTime;
     private String text;
 

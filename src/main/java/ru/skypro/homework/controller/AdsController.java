@@ -10,11 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.model.dto.ResponseWrapperAds;
+import ru.skypro.homework.model.dto.*;
 import ru.skypro.homework.model.entity.Ads;
-import ru.skypro.homework.model.dto.AdsComment;
-import ru.skypro.homework.model.dto.CreateAds;
-import ru.skypro.homework.model.dto.FullAds;
 import ru.skypro.homework.service.AdsService;
 
 @CrossOrigin(
@@ -77,8 +74,8 @@ public class AdsController {
                             responseCode = "200",
                             description = "OK",
                             content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-//                                    schema = @Schema(implementation = ResponseWrapperAds.class)
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseWrapperAds.class)
                             )
                     ),
                     @ApiResponse(
@@ -119,8 +116,8 @@ public class AdsController {
                             responseCode = "200",
                             description = "OK",
                             content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-//                                    schema = @Schema(implementation = ResponseWrapperAds.class)
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseWrapperAds.class)
                             )
                     ),
                     @ApiResponse(
@@ -158,8 +155,8 @@ public class AdsController {
                             responseCode = "200",
                             description = "OK",
                             content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-//                                    schema = @Schema(implementation = ResponseWrapperAdsComment.class)
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseWrapperAdsComment.class)
                             )
                     )
             },
@@ -202,8 +199,8 @@ public class AdsController {
                             responseCode = "200",
                             description = "OK",
                             content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-//                                    schema = @Schema(implementation = ResponseWrapperAdsComment.class)
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseWrapperAdsComment.class)
                             )
                     )
             },

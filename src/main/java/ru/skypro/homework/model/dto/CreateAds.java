@@ -6,7 +6,7 @@ import lombok.Data;
 public class CreateAds {
 
     private String description;
-    private Double price;
+    private Integer price;
     private String title;
 
 }
