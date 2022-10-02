@@ -15,5 +15,5 @@ public interface UserMapper {
 
     User toUser(UserDto userDto);
 
-    User loginReqToUserMapping(LoginReq loginReq);
+    User toUser(LoginReq loginReq);
 }
