@@ -8,10 +8,10 @@ import java.util.Collection;
 public class ResponseWrapperAds {
 
     private int count;
-    private Collection<AdsDto> result;
+    private Collection<AdsDto> results;
 
     public ResponseWrapperAds(Collection<AdsDto> result) {
         this.count = result.size();
-        this.result = result;
+        this.results = result;
     }
 }
