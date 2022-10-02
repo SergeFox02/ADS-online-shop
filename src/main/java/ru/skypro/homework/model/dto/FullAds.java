@@ -10,9 +10,9 @@ public class FullAds {
     private String authorLastName;
     private String description;
     private String email;
-    private Byte image;
+    private String image;
     private String phone;
-    private Double price;
+    private Integer price;
     private String title;
 
 }
