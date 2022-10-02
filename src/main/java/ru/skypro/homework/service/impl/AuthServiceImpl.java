@@ -60,6 +60,7 @@ public class AuthServiceImpl implements AuthService {
         logger.info("Register new user");
         User newUser = userMapper.toUser(registerReq);
         newUser.setRole(Role.USER);
+        newUser.setPassword(encoder.encode(registerReq.getPassword()));
         manager.createUser(newUser);
         userRepository.save(newUser);
         return true;
