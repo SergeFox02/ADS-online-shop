@@ -6,8 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springdoc.core.SecurityService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,19 +16,17 @@ import ru.skypro.homework.model.dto.CreateAds;
 import ru.skypro.homework.model.dto.FullAds;
 import ru.skypro.homework.service.AdsService;
 
-
-@CrossOrigin(value = "http://localhost:3000", allowCredentials = "true", allowedHeaders = "*",
+@CrossOrigin(
+        value = "http://localhost:3000",
+        allowCredentials = "true",
+        allowedHeaders = "*",
         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
-@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
 @RestController
 @RequestMapping("/ads")
 public class AdsController {
 
     private final String TAG_ADS_CONTROLLER = "Объявления";
     Logger logger = LoggerFactory.getLogger(AdsController.class);
-
-    @Autowired
-    private SecurityService securityService;
 
     private final AdsService adsService;
 
@@ -69,6 +65,42 @@ public class AdsController {
         logger.info("Call getAllAds");
         return ResponseEntity.ok(adsService.getAllAds());
     }
+
+    @Operation(
+            summary = "getAdsMe",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE
+//                                    schema = @Schema(implementation = ResponseWrapperAds.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized",
+                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Forbidden",
+                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not Found",
+                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
+                    )
+            },
+            tags = TAG_ADS_CONTROLLER
+    )
+    @GetMapping("/me")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public ResponseEntity<?> getAdsMe(){
+        return ResponseEntity.ok("Get Ads me");
+    }
+
 
     @Operation(
             summary = "addAds",
@@ -113,40 +145,6 @@ public class AdsController {
     @PostMapping
     public ResponseEntity<?> addAds(){
         return ResponseEntity.ok("Add new ads");
-    }
-
-    @Operation(
-            summary = "getAdsMe",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "OK",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-//                                    schema = @Schema(implementation = ResponseWrapperAds.class)
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "401",
-                            description = "Unauthorized",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "403",
-                            description = "Forbidden",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Not Found",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    )
-            },
-            tags = TAG_ADS_CONTROLLER
-    )
-    @GetMapping("/me")
-    public ResponseEntity<?> getAdsMe(){
-        return ResponseEntity.ok("Get Ads me");
     }
 
     @Operation(
