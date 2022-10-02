@@ -32,7 +32,7 @@ public class AdsServiceImpl implements AdsService {
         Collection<AdsDto> adsDtoCollection = adsRepository.findAll().stream()
                 .map(s -> adsMapper.toAdsDto(s))
                 .collect(Collectors.toList());
-        return new ResponseWrapperAds(adsDtoCollection.size(), adsDtoCollection);
+        return new ResponseWrapperAds(adsDtoCollection);
     }
 
     @Override

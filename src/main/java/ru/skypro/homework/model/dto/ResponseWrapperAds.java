@@ -10,8 +10,8 @@ public class ResponseWrapperAds {
     private int count;
     private Collection<AdsDto> result;
 
-    public ResponseWrapperAds(int count, Collection<AdsDto> result) {
-        this.count = count;
+    public ResponseWrapperAds(Collection<AdsDto> result) {
+        this.count = result.size();
         this.result = result;
     }
 }

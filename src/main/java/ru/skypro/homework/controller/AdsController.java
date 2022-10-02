@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.model.dto.ResponseWrapperAds;
 import ru.skypro.homework.model.entity.Ads;
 import ru.skypro.homework.model.dto.AdsComment;
 import ru.skypro.homework.model.dto.CreateAds;
@@ -40,7 +41,10 @@ public class AdsController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "OK",
-                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseWrapperAds.class)
+                            )
                     ),
                     @ApiResponse(
                             responseCode = "401",
