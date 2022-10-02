@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.Model.User;
+import ru.skypro.homework.model.entity.User;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController

@@ -1,7 +1,8 @@
-package ru.skypro.homework;
+package ru.skypro.homework.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+@EnableGlobalMethodSecurity(prePostEnabled=true)
 @Configuration
 public class WebSecurityConfig {
 
@@ -18,7 +20,9 @@ public class WebSecurityConfig {
             "/swagger-ui.html",
             "/v3/api-docs",
             "/webjars/**",
-            "/login", "/register"
+            "/login",
+            "/register",
+            "/ads/**"
     };
 
     @Bean
@@ -36,10 +40,9 @@ public class WebSecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->
-                        authz
-                                .mvcMatchers(AUTH_WHITELIST).permitAll()
+                                authz
+                                        .mvcMatchers(AUTH_WHITELIST).permitAll()
 //                                .mvcMatchers("/ads/**", "/users/**").authenticated()
-
                 )
                 .cors().disable()
                 .httpBasic(withDefaults());
@@ -48,4 +51,3 @@ public class WebSecurityConfig {
 
 
 }
-

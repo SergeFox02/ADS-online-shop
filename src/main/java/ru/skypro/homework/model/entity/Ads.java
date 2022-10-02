@@ -1,4 +1,4 @@
-package ru.skypro.homework.Model;
+package ru.skypro.homework.model.entity;
 
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -17,7 +17,7 @@ public class Ads {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pk;
+    private Long id;
 
     private String title;
 
@@ -27,7 +27,7 @@ public class Ads {
     @Type(type = "org.hibernate.type.TextType")
     private String image;
 
-    private Double price;
+    private Long price;
 
     @Transient
     @OneToMany(mappedBy = "ads")
@@ -42,18 +42,18 @@ public class Ads {
         if (this == o) return true;
         if (!(o instanceof Ads)) return false;
         Ads ads = (Ads) o;
-        return getPk().equals(ads.getPk());
+        return getId().equals(ads.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPk());
+        return Objects.hash(getId());
     }
 
     @Override
     public String toString() {
         return "Ads{" +
-                "pk=" + pk +
+                "pk=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +

@@ -1,4 +1,4 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.model.dto;
 
 import lombok.Data;
 
@@ -6,10 +6,10 @@ import lombok.Data;
 public class AdsDto {
 
     private Long pk;
-    private Long authorId;
+    private Long author;
     private String title;
     private String description;
     private String image;
-    private Double price;
+    private Long price;
 
 }
