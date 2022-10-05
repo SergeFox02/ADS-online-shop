@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.model.dto.NewPassword;
 import ru.skypro.homework.model.entity.User;
@@ -89,6 +91,8 @@ public class UserController {
     )
     @PostMapping
     public ResponseEntity<?> addUser(){
+        SecurityContext context = SecurityContextHolder.getContext();
+        System.out.println(context);
         return ResponseEntity.ok("Add users");
     }
 
