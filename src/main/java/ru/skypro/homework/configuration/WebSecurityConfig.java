@@ -4,10 +4,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import ru.skypro.homework.service.impl.UserServiceImpl;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -22,7 +24,7 @@ public class WebSecurityConfig {
             "/webjars/**",
             "/login",
             "/register",
-            "/ads/**"
+            "/ads"
     };
 
     @Bean
@@ -36,18 +38,17 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+    public SecurityFilterChain filterChain(HttpSecurity http, UserServiceImpl userService) throws Exception {
+        return http
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .csrf().disable()
-                .authorizeHttpRequests((authz) ->
-                                authz
-                                        .mvcMatchers(AUTH_WHITELIST).permitAll()
-//                                .mvcMatchers("/ads/**", "/users/**").authenticated()
-                )
                 .cors().disable()
-                .httpBasic(withDefaults());
-        return http.build();
+                .userDetailsService(userService)
+                .httpBasic(withDefaults())
+                .authorizeHttpRequests((authz) -> authz
+                        .mvcMatchers(AUTH_WHITELIST).permitAll()
+                        .mvcMatchers("/users/**").authenticated()
+                )
+                .build();
     }
-
-
 }

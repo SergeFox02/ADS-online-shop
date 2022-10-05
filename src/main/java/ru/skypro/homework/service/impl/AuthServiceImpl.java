@@ -1,10 +1,9 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
@@ -17,29 +16,16 @@ import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UserService;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     private final UserDetailsManager manager;
-
     private final PasswordEncoder encoder;
-
     private final UserRepository userRepository;
-
     private final UserService userService;
-
-    @Autowired
-    private UserMapper userMapper;
-
-    public AuthServiceImpl(UserDetailsManager manager,
-                           UserRepository userRepository,
-                           UserService userService) {
-        this.manager = manager;
-        this.encoder = new BCryptPasswordEncoder();
-        this.userRepository = userRepository;
-        this.userService = userService;
-    }
+    private final UserMapper userMapper;
 
     @Override
     public boolean login(String userName, String password) {
