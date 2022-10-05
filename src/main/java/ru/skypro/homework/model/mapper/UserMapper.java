@@ -13,6 +13,8 @@ public interface UserMapper {
     @Mapping(source = "username", target = "email")
     User toUser(RegisterReq registerReq);
 
+    UserDto toUserDto(User user);
+
     User toUser(UserDto userDto);
 
     User toUser(LoginReq loginReq);

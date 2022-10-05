@@ -15,8 +15,8 @@ import ru.skypro.homework.service.impl.UserServiceImpl;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-@EnableGlobalMethodSecurity(prePostEnabled=true)
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled=true)
 public class WebSecurityConfig {
 
     private static final String[] AUTH_WHITELIST = {
@@ -54,7 +54,7 @@ public class WebSecurityConfig {
                 .httpBasic(withDefaults())
                 .authorizeHttpRequests((authz) -> authz
                         .mvcMatchers(AUTH_WHITELIST).permitAll()
-                        .mvcMatchers("/users/**").authenticated()
+                        .mvcMatchers("/users/**", "/ads/**").authenticated()
                 )
                 .build();
     }

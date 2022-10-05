@@ -9,6 +9,7 @@ import ru.skypro.homework.model.dto.AdsDto;
 public interface AdsMapper {
 
     @Mapping(source = "author.id", target = "author")
+    @Mapping(source = "id", target = "pk")
     AdsDto toAdsDto(Ads ads);
 
 }
