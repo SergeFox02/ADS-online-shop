@@ -1,13 +1,12 @@
 package ru.skypro.homework.mapper.impl;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.Model.User;
-import ru.skypro.homework.dto.LoginReq;
-import ru.skypro.homework.dto.RegisterReq;
-import ru.skypro.homework.dto.Role;
-import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.model.entity.User;
+import ru.skypro.homework.model.dto.LoginReq;
+import ru.skypro.homework.model.dto.RegisterReq;
+import ru.skypro.homework.model.entity.Role;
+import ru.skypro.homework.model.dto.UserDto;
 import ru.skypro.homework.mapper.UserMapper;
-import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 
 @Service

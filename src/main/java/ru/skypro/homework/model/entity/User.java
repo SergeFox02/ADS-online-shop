@@ -1,9 +1,7 @@
-package ru.skypro.homework.Model;
+package ru.skypro.homework.model.entity;
 
-import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -16,7 +14,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "username")
     private String email;
 
     @Column
@@ -155,11 +153,11 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return Objects.equals(getId(), user.getId()) && getEmail().equals(user.getEmail()) && getPhone().equals(user.getPhone()) && getRole() == user.getRole();
+        return Objects.equals(getId(), user.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getEmail(), getPhone(), getRole());
+        return Objects.hash(getId());
     }
 }

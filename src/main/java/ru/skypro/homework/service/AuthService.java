@@ -1,8 +1,9 @@
 package ru.skypro.homework.service;
 
+import ru.skypro.homework.model.dto.RegisterReq;
+import ru.skypro.homework.model.entity.Role;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.RegisterReq;
-import ru.skypro.homework.dto.Role;
+
 
 
 public interface AuthService {

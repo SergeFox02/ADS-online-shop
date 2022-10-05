@@ -1,7 +1,7 @@
 package ru.skypro.homework.service;
 
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.Model.User;
+import ru.skypro.homework.model.User;
 
 public interface PictureService {
 

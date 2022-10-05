@@ -2,8 +2,8 @@ package ru.skypro.homework.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.skypro.homework.Model.User;
-import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.model.entity.User;
+import ru.skypro.homework.model.dto.UserDto;
 
 @Mapper
 public interface UserDtoMapper {

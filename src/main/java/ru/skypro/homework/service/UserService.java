@@ -3,7 +3,7 @@ package ru.skypro.homework.service;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import ru.skypro.homework.Model.User;
+import ru.skypro.homework.model.entity.User;
 
 import java.util.List;
 import java.util.Optional;

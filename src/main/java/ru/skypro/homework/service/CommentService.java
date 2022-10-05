@@ -1,8 +1,7 @@
 package ru.skypro.homework.service;
 
-import ru.skypro.homework.Model.Ads;
-import ru.skypro.homework.Model.Comment;
-import ru.skypro.homework.Model.User;
+import ru.skypro.homework.model.Comment;
+import ru.skypro.homework.model.User;
 
 import java.time.LocalDateTime;
 import java.util.Collection;

@@ -1,24 +1,60 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.Model.Ads;
-import ru.skypro.homework.Model.User;
+import ru.skypro.homework.model.entity.Ads;
+import ru.skypro.homework.model.entity.User;
+
 import ru.skypro.homework.service.AdsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import ru.skypro.homework.model.dto.ResponseWrapperAds;
+
+import ru.skypro.homework.model.dto.AdsDto;
+import ru.skypro.homework.model.mapper.AdsMapper;
+import ru.skypro.homework.repository.AdsRepository;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 import java.util.List;
 
+/**
+ * Service for working with Ads
+ */
 @Service
 public class AdsServiceImpl implements AdsService {
+
+    private final AdsRepository adsRepository;
+
+    @Autowired
+    private AdsMapper adsMapper;
+
+    public AdsServiceImpl(AdsRepository adsRepository) {
+        this.adsRepository = adsRepository;
+    }
+
+    @Override
+    public ResponseWrapperAds getAllAds() {
+        Collection<AdsDto> adsDtoCollection = adsRepository.findAll().stream()
+                .map(s -> adsMapper.toAdsDto(s))
+                .collect(Collectors.toList());
+        return new ResponseWrapperAds(adsDtoCollection);
+    }
+
+    @Override
+    public Ads findAds(Long id) {
+        return null;
+    }
 
     @Override
     public boolean createAd(String title, String description, String image, float price, User author) {
         return false;
     }
 
-    @Override
-    public List<Ads> getAllAds() {
-        return null;
-    }
+//    @Override
+//    public List<Ads> getAllAds() {
+//        return null;
+//    }
+
 
     @Override
     public Ads getAd(Long pk) {
