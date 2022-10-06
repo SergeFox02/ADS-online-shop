@@ -5,12 +5,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.model.dto.ResponseWrapperUser;
+import ru.skypro.homework.model.dto.UserDto;
 import ru.skypro.homework.model.entity.User;
+import ru.skypro.homework.model.mapper.AdsMapper;
+import ru.skypro.homework.model.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +24,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
+    private final UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -62,6 +69,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isPresent(String username) {
         return userRepository.findUserByEmail(username).isPresent();
+    }
+
+    @Override
+    public ResponseWrapperUser getUsers() {
+//        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        User user1 = userService.findUserByEmail(user.getEmail()).orElseThrow(() -> new UsernameNotFoundException("lssdlkfj"));
+//        List list = new ArrayList<>();
+//        list.add(user1);
+//        ResponseWrapperUser users = new ResponseWrapperUser(list);
+        Collection<UserDto> userDtoCollection = userRepository.findAll().stream()
+                .map(user -> userMapper.toUserDto(user))
+                .collect(Collectors.toList());
+        return new ResponseWrapperUser(userDtoCollection);
     }
 
 }

@@ -19,7 +19,6 @@ import ru.skypro.homework.model.mapper.UserMapper;
 import ru.skypro.homework.service.impl.UserServiceImpl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -64,15 +63,7 @@ public class UserController {
     @GetMapping("/me")
 //    @PreAuthorize(value = "USER")
     public ResponseEntity<?> getUsers(){
-
-        //Это нужно все в сервис отправить еще
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user1 = userService.findUserByEmail(user.getEmail()).orElseThrow(() -> new UsernameNotFoundException("lssdlkfj"));
-        List list = new ArrayList<>();
-        list.add(user1);
-        ResponseWrapperUser users = new ResponseWrapperUser(list);
-        return ResponseEntity.ok(users);
-
+        return ResponseEntity.ok(userService.getUsers());
     }
 
     @Operation(
