@@ -5,21 +5,16 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.model.dto.NewPassword;
-import ru.skypro.homework.model.dto.ResponseWrapperUser;
 import ru.skypro.homework.model.entity.User;
-import ru.skypro.homework.model.mapper.UserMapper;
 import ru.skypro.homework.service.impl.UserServiceImpl;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
@@ -28,8 +23,8 @@ import java.util.List;
 public class UserController {
 
     private final String TAG_USER_CONTROLLER = "Пользователи";
+    Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserServiceImpl userService;
-    private final UserMapper userMapper;
 
     @Operation(
             summary = "updateUser",
@@ -63,6 +58,7 @@ public class UserController {
     @GetMapping("/me")
 //    @PreAuthorize(value = "USER")
     public ResponseEntity<?> getUsers(){
+        logger.info("getUsers in users/me");
         return ResponseEntity.ok(userService.getUsers());
     }
 
@@ -227,6 +223,7 @@ public class UserController {
     )
     @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable Long id){
-        return ResponseEntity.ok("Get users with pk = " + id);
+        logger.info("Get users with id = " + id);
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 }

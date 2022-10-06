@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.model.dto.ResponseWrapperUser;
 import ru.skypro.homework.model.dto.UserDto;
 import ru.skypro.homework.model.entity.User;
-import ru.skypro.homework.model.mapper.AdsMapper;
 import ru.skypro.homework.model.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
@@ -82,6 +81,14 @@ public class UserServiceImpl implements UserService {
                 .map(user -> userMapper.toUserDto(user))
                 .collect(Collectors.toList());
         return new ResponseWrapperUser(userDtoCollection);
+    }
+
+    @Override
+    public UserDto getUserById(long id) {
+        if (userRepository.findById(id).isPresent()){
+            return userMapper.toUserDto(userRepository.getById(id));
+        }
+        return null;
     }
 
 }

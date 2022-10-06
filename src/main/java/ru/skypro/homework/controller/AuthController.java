@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,8 @@ import static ru.skypro.homework.model.entity.Role.USER;
 public class AuthController {
 
     private final String TAG_AUTH_CONTROLLER = "Авторизация";
+
+    Logger logger = LoggerFactory.getLogger(AuthController.class);
     private final AuthService authService;
 
 
@@ -70,7 +74,9 @@ public class AuthController {
     )
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginReq req) {
+        logger.info("Call login");
         if (authService.login(req.getUsername(), req.getPassword())) {
+            logger.info("user is login");
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
