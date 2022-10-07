@@ -26,7 +26,7 @@ public class WebSecurityConfig {
             "/webjars/**",
             "/login",
             "/register",
-            "/ads"
+            "/ads/**"
     };
 
     @Bean
@@ -54,7 +54,7 @@ public class WebSecurityConfig {
                 .httpBasic(withDefaults())
                 .authorizeHttpRequests((authz) -> authz
                         .mvcMatchers(AUTH_WHITELIST).permitAll()
-                        .mvcMatchers("/users/**", "/ads/**").authenticated()
+                        .mvcMatchers("/users/**").authenticated()
                 )
                 .build();
     }

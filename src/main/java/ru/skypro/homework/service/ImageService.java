@@ -9,6 +9,6 @@ public interface ImageService {
 
     void upLoadImage(Long id, MultipartFile file) throws IOException;
 
-    Image findImage(Long avatarId);
+    Image findImage(Long id);
 
 }

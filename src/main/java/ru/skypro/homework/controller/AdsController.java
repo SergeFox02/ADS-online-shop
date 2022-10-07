@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -62,9 +63,10 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @GetMapping
-    public ResponseEntity<?> getAllAds(){
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseWrapperAds getAllAds(){
         logger.info("Call getAllAds");
-        return ResponseEntity.ok(adsService.getAllAds());
+        return adsService.getAllAds();
     }
 
     @Operation(
@@ -99,7 +101,7 @@ public class AdsController {
     @GetMapping("/me")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<?> getAdsMe(){
-        return ResponseEntity.ok("Get Ads me");
+        return ResponseEntity.ok(adsService.getAdsMe());
     }
 
 
@@ -144,8 +146,9 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @PostMapping
-    public ResponseEntity<?> addAds(){
-        return ResponseEntity.ok("Add new ads");
+    public ResponseEntity<?> addAds(@RequestBody CreateAds createAds){
+        logger.info("call addAds in controller");
+        return ResponseEntity.ok(adsService.createAds(createAds));
     }
 
     @Operation(

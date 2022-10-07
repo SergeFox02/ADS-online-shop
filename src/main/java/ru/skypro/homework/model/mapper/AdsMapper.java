@@ -2,6 +2,7 @@ package ru.skypro.homework.model.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import ru.skypro.homework.model.dto.CreateAds;
 import ru.skypro.homework.model.entity.Ads;
 import ru.skypro.homework.model.dto.AdsDto;
 
@@ -11,5 +12,7 @@ public interface AdsMapper {
     @Mapping(source = "author.id", target = "author")
     @Mapping(source = "id", target = "pk")
     AdsDto toAdsDto(Ads ads);
+
+    Ads toAds(CreateAds createAds);
 
 }
