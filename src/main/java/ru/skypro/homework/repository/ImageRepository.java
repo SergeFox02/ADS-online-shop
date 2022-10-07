@@ -7,6 +7,5 @@ import java.util.Optional;
 
 public interface ImageRepository extends JpaRepository<Image, Long> {
 
-    @Override
     Optional<Image> findById(Long id);
 }

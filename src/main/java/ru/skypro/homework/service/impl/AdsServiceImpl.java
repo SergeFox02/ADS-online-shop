@@ -66,7 +66,6 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public ResponseWrapperAds getAdsMe() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        findAdsByAuthor(user.getId())
         Collection<AdsDto> adsDtoCollection = adsRepository.findAdsByAuthor(user.getId()).stream()
                 .map(ads -> adsMapper.toAdsDto(ads))
                 .collect(Collectors.toList());
