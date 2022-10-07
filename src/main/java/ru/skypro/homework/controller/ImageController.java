@@ -3,6 +3,8 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.entity.Image;
 import ru.skypro.homework.service.ImageService;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 @RestController
 @CrossOrigin(
@@ -30,28 +29,21 @@ public class ImageController {
     private final ImageService imageService;
 
     @GetMapping(value = "/{id}")
-    public void downloadAvatar(@PathVariable Long id, HttpServletResponse response) throws IOException {
+    public ResponseEntity<?> downloadAvatar(@PathVariable Long id){
         logger.info("Call method downloadAvatar");
         Image image = imageService.findImage(id);
 
-        Path path = Path.of(image.getFilePath());
-        try (InputStream is = Files.newInputStream(path);
-             OutputStream os = response.getOutputStream();
-             BufferedInputStream bis = new BufferedInputStream(is, 1024);
-             BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
-        ) {
-            response.setContentType(image.getMediaType());
-            response.setContentLength((int) image.getFileSize());
-            response.setStatus(200);
-            bis.transferTo(bos);
-        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(image.getMediaType()));
+        headers.setContentLength(image.getData().length);
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(image.getData());
     }
 
-    @PostMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> upLoadAvatar(@PathVariable Long id, @RequestParam MultipartFile image) throws IOException {
         logger.info("Call method upLoadAvatar");
         if (image.getSize() > 1024 * 600) {
-            logger.warn("Warning: avatar is to big");
+            logger.warn("Warning: image is to big");
             return ResponseEntity.badRequest().body("File is to big");
         }
         imageService.upLoadImage(id, image);

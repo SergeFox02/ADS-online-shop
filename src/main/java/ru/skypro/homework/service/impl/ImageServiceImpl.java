@@ -57,6 +57,7 @@ public class ImageServiceImpl implements ImageService {
         }
 
         Image image = findImage(adsId);
+
         image.setAds(ads);
         image.setFilePath(filePath.toString());
         image.setFileSize(file.getSize());
