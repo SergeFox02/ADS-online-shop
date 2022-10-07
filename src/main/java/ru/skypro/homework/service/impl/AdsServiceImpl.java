@@ -47,6 +47,14 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
+    public Ads findAdsById(long id) {
+        if (!adsRepository.findById(id).isPresent()){
+            return null;
+        }
+        return adsRepository.findById(id).get();
+    }
+
+    @Override
     public CreateAds createAds(CreateAds createAds) {
         logger.info("call create user in AdsService");
         Ads newAds = adsMapper.toAds(createAds);

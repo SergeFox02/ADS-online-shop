@@ -3,8 +3,10 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Transient;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.entity.Image;
 import ru.skypro.homework.service.ImageService;
 
@@ -32,16 +34,27 @@ public class ImageController {
         logger.info("Call method downloadAvatar");
         Image image = imageService.findImage(id);
 
-//        Path path = Path.of(image.getFilePath());
-//        try (InputStream is = Files.newInputStream(path);
-//             OutputStream os = response.getOutputStream();
-//             BufferedInputStream bis = new BufferedInputStream(is, 1024);
-//             BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
-//        ) {
-//            response.setContentType(image.getMediaType());
-//            response.setContentLength((int) image.getFileSize());
-//            response.setStatus(200);
-//            bis.transferTo(bos);
-//        }
+        Path path = Path.of(image.getFilePath());
+        try (InputStream is = Files.newInputStream(path);
+             OutputStream os = response.getOutputStream();
+             BufferedInputStream bis = new BufferedInputStream(is, 1024);
+             BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
+        ) {
+            response.setContentType(image.getMediaType());
+            response.setContentLength((int) image.getFileSize());
+            response.setStatus(200);
+            bis.transferTo(bos);
+        }
+    }
+
+    @PostMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> upLoadAvatar(@PathVariable Long id, @RequestParam MultipartFile image) throws IOException {
+        logger.info("Call method upLoadAvatar");
+        if (image.getSize() > 1024 * 600) {
+            logger.warn("Warning: avatar is to big");
+            return ResponseEntity.badRequest().body("File is to big");
+        }
+        imageService.upLoadImage(id, image);
+        return ResponseEntity.ok().build();
     }
 }

@@ -42,27 +42,28 @@ public class ImageServiceImpl implements ImageService {
     public void upLoadImage(Long adsId, MultipartFile file) throws IOException {
 
         logger.info("Was invoked method for upload image of ads");
-//        Ads ads = adsService.findAds(adsId);
-//        Path filePath = Path.of(imagesDir, adsId + "." + getExtension(file.getOriginalFilename()));
-//        Files.createDirectories(filePath.getParent());
-//        Files.deleteIfExists(filePath);
-//
-//        try (InputStream is = file.getInputStream();
-//             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
-//             BufferedInputStream bis = new BufferedInputStream(is, 1024);
-//             BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
-//        ) {
-//            bis.transferTo(bos);
-//        }
-//
-//        Image image = findImage(adsId);
-//        image.setAds(ads);
-//        image.setFilePath(filePath.toString());
-//        image.setFileSize(file.getSize());
-//        image.setMediaType(file.getContentType());
-//        image.setData(generateImagePreview(filePath));
-//
-//        imageRepository.save(image);
+        Ads ads = adsService.findAdsById(adsId);
+
+        Path filePath = Path.of(imagesDir, adsId + "." + getExtension(file.getOriginalFilename()));
+        Files.createDirectories(filePath.getParent());
+        Files.deleteIfExists(filePath);
+
+        try (InputStream is = file.getInputStream();
+             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
+             BufferedInputStream bis = new BufferedInputStream(is, 1024);
+             BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
+        ) {
+            bis.transferTo(bos);
+        }
+
+        Image image = findImage(adsId);
+        image.setAds(ads);
+        image.setFilePath(filePath.toString());
+        image.setFileSize(file.getSize());
+        image.setMediaType(file.getContentType());
+        image.setData(generateImagePreview(filePath));
+
+        imageRepository.save(image);
     }
 
     @Override
