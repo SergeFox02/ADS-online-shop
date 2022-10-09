@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserById(long id) {
+    public UserDto getUserDto(long id) {
         if (userRepository.findById(id).isPresent()){
             return userMapper.toUserDto(userRepository.findById(id).get());
         }

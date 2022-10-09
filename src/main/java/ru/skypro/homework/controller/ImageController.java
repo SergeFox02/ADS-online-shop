@@ -29,7 +29,7 @@ public class ImageController {
     private final ImageService imageService;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> downloadAvatar(@PathVariable Long id){
+    public ResponseEntity<?> getImage(@PathVariable Long id){
         logger.info("Call method downloadAvatar");
         Image image = imageService.findImage(id);
 
@@ -40,7 +40,7 @@ public class ImageController {
     }
 
     @PostMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> upLoadAvatar(@PathVariable Long id, @RequestParam MultipartFile image) throws IOException {
+    public ResponseEntity<?> addImage(@PathVariable Long id, @RequestParam MultipartFile image) throws IOException {
         logger.info("Call method upLoadAvatar");
         if (image.getSize() > 1024 * 600) {
             logger.warn("Warning: image is to big");

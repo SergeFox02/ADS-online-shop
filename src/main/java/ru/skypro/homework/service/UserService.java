@@ -27,6 +27,6 @@ public interface UserService extends UserDetailsService {
 
     ResponseWrapperUser getUsers();
 
-    UserDto getUserById(long id);
+    UserDto getUserDto(long id);
 
 }
