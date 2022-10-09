@@ -26,7 +26,7 @@ public class WebSecurityConfig {
             "/webjars/**",
             "/login",
             "/register",
-            "/ads/**"
+            "/ads"
     };
 
     @Bean
@@ -49,12 +49,12 @@ public class WebSecurityConfig {
         return http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .csrf().disable()
-                .cors().disable()
+                .cors().and()
                 .userDetailsService(userService)
                 .httpBasic(withDefaults())
                 .authorizeHttpRequests((authz) -> authz
                         .mvcMatchers(AUTH_WHITELIST).permitAll()
-                        .mvcMatchers("/users/**").authenticated()
+                        .mvcMatchers("/users/**", "ads/**").authenticated()
                 )
                 .build();
     }
