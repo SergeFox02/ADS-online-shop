@@ -284,7 +284,10 @@ public class AdsController {
     )
     @GetMapping("/{id}")
     public ResponseEntity<?> getAds(@PathVariable Long id){
-        return ResponseEntity.ok("Get Ads pk = " + id);
+        if (adsService.getFullAds(id) == null){
+            return ResponseEntity.status(404).build();
+        }
+        return ResponseEntity.ok(adsService.getFullAds(id));
     }
 
     @Operation(

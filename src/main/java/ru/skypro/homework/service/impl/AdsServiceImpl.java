@@ -6,12 +6,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.model.dto.CreateAds;
+import ru.skypro.homework.model.dto.FullAds;
 import ru.skypro.homework.model.dto.ResponseWrapperAds;
 import ru.skypro.homework.model.dto.AdsDto;
 import ru.skypro.homework.model.entity.Ads;
 import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.model.mapper.AdsMapper;
 import ru.skypro.homework.repository.AdsRepository;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
 
 import java.util.Collection;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 public class AdsServiceImpl implements AdsService {
 
     private final AdsRepository adsRepository;
+    private final UserRepository userRepository;
     private final AdsMapper adsMapper;
 
     Logger logger = LoggerFactory.getLogger(AdsServiceImpl.class);
@@ -38,17 +41,8 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDto findAds(Long id) {
-        logger.info("Was invoked method for find student by id = {}", id);
-        if (!adsRepository.findById(id).isPresent()){
-            return null;
-        }
-        return adsMapper.toAdsDto(adsRepository.findById(id).get());
-    }
-
-    @Override
     public Ads findAdsById(long id) {
-        if (!adsRepository.findById(id).isPresent()){
+        if (adsRepository.findById(id).isEmpty()){
             return null;
         }
         return adsRepository.findById(id).get();
@@ -71,6 +65,15 @@ public class AdsServiceImpl implements AdsService {
                 .collect(Collectors.toList());
 
         return new ResponseWrapperAds(adsDtoCollection);
+    }
+
+    @Override
+    public FullAds getFullAds(Long id) {
+        if (adsRepository.findById(id).isEmpty()){
+            return null;
+        }
+        Ads getAds = adsRepository.findById(id).get();
+        return adsMapper.toFullAds(getAds, userRepository.findById(getAds.getAuthor().getId()).get());
     }
 
 }

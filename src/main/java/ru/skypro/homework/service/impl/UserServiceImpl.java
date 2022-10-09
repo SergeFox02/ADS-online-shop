@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.model.dto.FullAds;
 import ru.skypro.homework.model.dto.ResponseWrapperUser;
 import ru.skypro.homework.model.dto.UserDto;
 import ru.skypro.homework.model.entity.User;
