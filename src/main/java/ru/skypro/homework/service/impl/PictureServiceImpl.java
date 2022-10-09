@@ -2,7 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.service.PictureService;
 
 @Service

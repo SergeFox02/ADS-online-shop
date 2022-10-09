@@ -38,11 +38,11 @@ public class Ads {
     private User author;
 
     public Long getPk() {
-        return pk;
+        return id;
     }
 
     public void setPk(Long pk) {
-        this.pk = pk;
+        this.id = pk;
     }
 
     public String getTitle() {
@@ -69,11 +69,11 @@ public class Ads {
         this.image = image;
     }
 
-    public Float getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(Float price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 

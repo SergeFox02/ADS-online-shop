@@ -1,8 +1,8 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.model.Comment;
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.model.entity.Comment;
+import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.service.CommentService;
 
 import java.time.LocalDateTime;

@@ -11,11 +11,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.mapper.UserDtoMapper;
 import ru.skypro.homework.model.dto.NewPassword;
 import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.model.dto.UserDto;
-import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.mapper.UserDtoMapper;
 import ru.skypro.homework.service.UserService;
 
 import java.util.logging.Logger;
@@ -29,17 +32,12 @@ public class UserController {
     Logger logger = Logger.getLogger(String.valueOf(UserController.class));
 
     private final UserService userService;
-    private final UserMapper userMapper;
+    private final UserDtoMapper userMapper;
 
     public UserController(UserService userService,
-                          UserMapper userMapper) {
+                          UserDtoMapper userMapper) {
         this.userService = userService;
         this.userMapper = userMapper;
-    }
-
-    @PostMapping
-    public ResponseEntity<?> addUser(){
-        return ResponseEntity.ok("Add users");
     }
 
     @Operation(
@@ -118,6 +116,8 @@ public class UserController {
     )
     @PostMapping
     public ResponseEntity<?> addUser(){
+        SecurityContext context = SecurityContextHolder.getContext();
+        System.out.println(context);
         return ResponseEntity.ok("Add users");
     }
 

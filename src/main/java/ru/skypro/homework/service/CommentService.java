@@ -1,7 +1,7 @@
 package ru.skypro.homework.service;
 
-import ru.skypro.homework.model.Comment;
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.model.entity.Comment;
+import ru.skypro.homework.model.entity.User;
 
 import java.time.LocalDateTime;
 import java.util.Collection;

@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.model.dto.RegisterReq;
+import ru.skypro.homework.model.dto.*;
 import ru.skypro.homework.model.entity.Role;
 import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.model.mapper.UserMapper;
@@ -29,18 +30,18 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserService userService;
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     public AuthServiceImpl(UserDetailsManager manager,
                            UserRepository userRepository,
+                           PasswordEncoder encoder,
                            UserService userService,
-                           UserMapper mapper) {
+                           UserMapper userMapper) {
         this.manager = manager;
         this.encoder = new BCryptPasswordEncoder();
         this.userRepository = userRepository;
         this.userService = userService;
-        this.mapper = mapper;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -54,17 +55,18 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean register(RegisterReq registerReq, Role role) {
+    public boolean register(RegisterReq registerReq) {
         if (manager.userExists(registerReq.getUsername())) {
-            logger.info("Not register new user? because user exist");
+            logger.info("User already registered!");
             return false;
         }
-        logger.info("Register new user");
+        logger.info("Registering new user");
         User newUser = userMapper.toUser(registerReq);
+
         newUser.setRole(Role.USER);
         newUser.setPassword(encoder.encode(registerReq.getPassword()));
         manager.createUser(newUser);
-        userRepository.save(newUser);
+        userService.saveUser(newUser);
         return true;
     }
 

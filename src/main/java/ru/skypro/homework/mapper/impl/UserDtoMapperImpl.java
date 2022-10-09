@@ -1,23 +1,43 @@
 package ru.skypro.homework.mapper.impl;
 
+import org.springframework.context.annotation.Primary;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.mapper.UserDtoMapper;
 import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.model.dto.LoginReq;
-import ru.skypro.homework.model.dto.RegisterReq;
+import ru.skypro.homework.model.dto.*;
 import ru.skypro.homework.model.entity.Role;
 import ru.skypro.homework.model.dto.UserDto;
-import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.model.mapper.UserMapper;
 import ru.skypro.homework.service.UserService;
 
 @Service
-public class RegisterReqToUserMapper implements UserMapper {
+@Primary
+public class UserDtoMapperImpl implements UserDtoMapper, UserMapper {
 
     private final UserService userService;
 
-    public RegisterReqToUserMapper(UserService userService) {
+    private final PasswordEncoder encoder;
+
+    public UserDtoMapperImpl(UserService userService) {
         this.userService = userService;
+        this.encoder = new BCryptPasswordEncoder();
     }
 
+    @Override
+    public UserDto UserToUserDto(User user) {
+        return null;
+    }
+
+
+    @Override
+    public User UserDtoToUser(UserDto userDto) {
+        return null;
+    }
+
+    @Override
     public User regReqToUserMapping(RegisterReq registerReq, Role role) {
         User user = new User();
 
@@ -36,11 +56,8 @@ public class RegisterReqToUserMapper implements UserMapper {
                 user.setLastName(registerReq.getLastName());
             }
             user.setPassword(registerReq.getPassword());
-            if (registerReq.getRole() == null) {
-                user.setRole(Role.USER);
-            } else {
-                user.setRole(role);
-            }
+            user.setRole(Role.USER);
+
             if (registerReq.getPhone() == null) {
                 user.setPhone("Не задано");
             } else {
@@ -51,13 +68,37 @@ public class RegisterReqToUserMapper implements UserMapper {
         return user;
     }
 
+    @Override
+    public User toUser(RegisterReq registerReq) {
+        return null;
+    }
+
+    @Override
+    public User toUser(UserDto userDto) {
+        User user = new User();
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setPhone(userDto.getPhone());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(encoder.encode(user.getPassword()));
+
+        userService.saveUser(user);
+        return user;
+    }
+
+    @Override
+    public User toUser(LoginReq loginReq) {
+
+        return null;
+    }
+
     public UserDto userToDtoMapper(User user) {
-        UserDto dto = new UserDto();
-        dto.setUsername(user.getUsername());
-        dto.setPhone(user.getPhone());
-        dto.setFirstName(user.getFirstName());
-        dto.setLastName(user.getLastName());
-        return dto;
+        UserDto userDto = new UserDto();
+        userDto.setEmail(user.getUsername());
+        userDto.setPhone(user.getPhone());
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        return userDto;
     }
 
     @Override

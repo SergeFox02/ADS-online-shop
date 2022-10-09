@@ -1,9 +1,11 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.model.entity.User;
@@ -32,27 +34,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = new User();
-        if (userRepository.findUserByEmail(email).isPresent()) {
-            user = userRepository.findUserByEmail(email).get();
-        }
-        else {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        return user;
+        return userRepository.findUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     @Override
     public Optional<User> findUserByEmail(String email) {
-
         return userRepository.findUserByEmail(email);
     }
 
     @Override
     public User findUserById(Long userId) {
-        Optional<User> userFromDb = userRepository.findById(userId);
-        return userFromDb.orElse(new User());
+        return userRepository.findById(userId).orElse(new User());
     }
 
     @Override
@@ -62,14 +54,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public boolean saveUser(User user) {
-
         if (isPresent(user.getUsername())) {
             return false;
         } else {
             user.setPassword(encoder.encode(user.getPassword()));
             userRepository.saveAndFlush(user);
         }
-
         return true;
     }
 
@@ -91,4 +81,5 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public boolean isPresent(String username) {
         return userRepository.findUserByEmail(username).isPresent();
     }
+
 }

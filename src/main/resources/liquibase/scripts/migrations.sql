@@ -48,6 +48,3 @@ CREATE TABLE image(
 
 -- changeSet Serge:5
 ALTER TABLE ads ALTER COLUMN price TYPE bigint;
-
--- changeSet Serge:6
-ALTER TABLE ads RENAME COLUMN pk TO id;

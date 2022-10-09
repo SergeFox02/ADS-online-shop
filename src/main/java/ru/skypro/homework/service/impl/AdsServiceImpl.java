@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.model.entity.Ads;
 import ru.skypro.homework.model.entity.User;
@@ -24,18 +25,18 @@ import java.util.List;
 public class AdsServiceImpl implements AdsService {
 
     private final AdsRepository adsRepository;
+    private final AdsMapper adsMapper;
 
-    @Autowired
-    private AdsMapper adsMapper;
-
-    public AdsServiceImpl(AdsRepository adsRepository) {
+    public AdsServiceImpl(AdsRepository adsRepository,
+                          AdsMapper adsMapper) {
         this.adsRepository = adsRepository;
+        this.adsMapper = adsMapper;
     }
 
     @Override
     public ResponseWrapperAds getAllAds() {
         Collection<AdsDto> adsDtoCollection = adsRepository.findAll().stream()
-                .map(s -> adsMapper.toAdsDto(s))
+                .map(adsMapper::toAdsDto)
                 .collect(Collectors.toList());
         return new ResponseWrapperAds(adsDtoCollection);
     }
