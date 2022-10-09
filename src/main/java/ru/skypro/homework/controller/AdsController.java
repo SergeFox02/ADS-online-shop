@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.model.dto.*;
 import ru.skypro.homework.model.entity.Ads;
@@ -99,8 +98,8 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @GetMapping("/me")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<?> getAdsMe(){
+        logger.info("Call ads/me");
         return ResponseEntity.ok(adsService.getAdsMe());
     }
 

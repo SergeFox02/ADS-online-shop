@@ -17,6 +17,7 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -60,8 +61,9 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public ResponseWrapperAds getAdsMe() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Collection<AdsDto> adsDtoCollection = adsRepository.findAdsByAuthor(user.getId()).stream()
-                .map(ads -> adsMapper.toAdsDto(ads))
+        Collection<AdsDto> adsDtoCollection = adsRepository.findAll().stream()
+                .filter(ads -> Objects.equals(ads.getAuthor().getId(), user.getId()))
+                .map(adsMapper::toAdsDto)
                 .collect(Collectors.toList());
 
         return new ResponseWrapperAds(adsDtoCollection);
