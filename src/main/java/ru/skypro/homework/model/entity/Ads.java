@@ -23,19 +23,17 @@ public class Ads {
 
     private String description;
 
-//    @Lob
-//    @Type(type = "org.hibernate.type.TextType")
     @JoinColumn(name = "image_id")
     @OneToOne(cascade = CascadeType.ALL)
     private Image image;
 
     private Long price;
 
-    @Transient
-    @OneToMany(mappedBy = "ads")
+//    @Transient
+    @OneToMany(mappedBy = "ads", cascade = CascadeType.ALL)
     private Collection<Comment> comments;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author")
     private User author;
 
