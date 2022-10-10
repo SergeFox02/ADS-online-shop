@@ -23,9 +23,11 @@ public class Ads {
 
     private String description;
 
-    @Lob
-    @Type(type = "org.hibernate.type.TextType")
-    private String image;
+//    @Lob
+//    @Type(type = "org.hibernate.type.TextType")
+    @JoinColumn(name = "image_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    private Image image;
 
     private Long price;
 

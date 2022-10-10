@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,9 +12,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.dto.*;
 import ru.skypro.homework.model.entity.Ads;
+import ru.skypro.homework.model.entity.Image;
 import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.ImageService;
+
+import javax.validation.Valid;
+import java.io.IOException;
 
 @CrossOrigin(
         value = "http://localhost:3000",
@@ -28,9 +35,11 @@ public class AdsController {
     Logger logger = LoggerFactory.getLogger(AdsController.class);
 
     private final AdsService adsService;
+    private final ImageService imageService;
 
-    public AdsController(AdsService adsService) {
+    public AdsController(AdsService adsService, ImageService imageService) {
         this.adsService = adsService;
+        this.imageService = imageService;
     }
 
     @Operation(
@@ -147,9 +156,17 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @PostMapping
-    public ResponseEntity<?> addAds(@RequestBody CreateAds createAds){
+    public ResponseEntity<?> addAds(@Valid @RequestPart("properties") @Parameter(schema = @Schema(type = "string", format = "binary")) CreateAds ads,
+                @RequestPart("image") MultipartFile file) {
+        Image image;
+        try{
+            image = imageService.addImage(file);
+        }catch (IOException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         logger.info("call addAds in controller");
-        return ResponseEntity.ok(adsService.createAds(createAds));
+        return ResponseEntity.ok(adsService.addAds(ads, image));
     }
 
     @Operation(

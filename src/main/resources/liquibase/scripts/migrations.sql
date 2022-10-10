@@ -51,3 +51,9 @@ ALTER TABLE ads ALTER COLUMN price TYPE bigint;
 
 -- changeSet Serge:6
 ALTER TABLE ads RENAME COLUMN pk TO id;
+
+-- changeSet Serge:7
+ALTER TABLE ads RENAME COLUMN image TO image_id;
+
+-- changeSet Serge:8
+ALTER TABLE ads ALTER COLUMN image_id TYPE bigint USING image_id::bigint;

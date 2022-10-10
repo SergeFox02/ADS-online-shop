@@ -39,14 +39,14 @@ public class ImageController {
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(image.getData());
     }
 
-    @PostMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addImage(@PathVariable Long id, @RequestParam MultipartFile image) throws IOException {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> addImage(@RequestParam MultipartFile image) throws IOException {
         logger.info("Call method upLoadAvatar");
         if (image.getSize() > 1024 * 600) {
             logger.warn("Warning: image is to big");
             return ResponseEntity.badRequest().body("File is to big");
         }
-        imageService.upLoadImage(id, image);
+        imageService.addImage(image);
         return ResponseEntity.ok().build();
     }
 }
