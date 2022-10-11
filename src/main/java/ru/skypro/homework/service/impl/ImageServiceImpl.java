@@ -48,7 +48,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image findImage(Long imageId) {
+    public Image findImage(int imageId) {
         logger.info("Was invoked method for find image by id = {}", imageId);
         return imageRepository.findById(imageId).orElse(new Image());
     }

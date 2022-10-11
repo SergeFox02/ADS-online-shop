@@ -5,7 +5,7 @@ import ru.skypro.homework.model.entity.Image;
 
 import java.util.Optional;
 
-public interface ImageRepository extends JpaRepository<Image, Long> {
+public interface ImageRepository extends JpaRepository<Image, Integer> {
 
-    Optional<Image> findById(Long id);
+    Optional<Image> findById(Integer id);
 }

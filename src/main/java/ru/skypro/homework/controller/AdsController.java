@@ -301,7 +301,7 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAds(@PathVariable Long id){
+    public ResponseEntity<?> getAds(@PathVariable Integer id){
         if (adsService.getFullAds(id) == null){
             return ResponseEntity.status(404).build();
         }

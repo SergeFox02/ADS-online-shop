@@ -16,7 +16,7 @@ public class Ads {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String title;
 
@@ -26,7 +26,7 @@ public class Ads {
     @OneToOne(cascade = CascadeType.ALL)
     private Image image;
 
-    private Long price;
+    private Integer price;
 
     @Transient
     @OneToMany(mappedBy = "ads", cascade = CascadeType.ALL)
@@ -57,6 +57,7 @@ public class Ads {
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 ", author=" + author +
+                ", image=" + image +
                 '}';
     }
 }

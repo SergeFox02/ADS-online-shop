@@ -15,18 +15,18 @@ public interface UserService extends UserDetailsService {
 
     Optional<User> findUserByEmail(String email);
 
-    User findUserById(Long userId);
+    User findUserById(int userId);
 
     List<User> allUsers();
 
     boolean saveUser(User user);
 
-    boolean deleteUser(Long userId);
+    boolean deleteUser(int userId);
 
     boolean isPresent(String username);
 
     ResponseWrapperUser getUsers();
 
-    UserDto getUserDto(long id);
+    UserDto getUserDto(int id);
 
 }

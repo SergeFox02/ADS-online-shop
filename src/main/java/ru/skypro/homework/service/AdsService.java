@@ -11,13 +11,13 @@ public interface AdsService {
 
     ResponseWrapperAds getAllAds();
 
-    Ads findAdsById(long id);
+    Ads findAdsById(int id);
 
 //    CreateAds createAds(CreateAds createAds);
 
     ResponseWrapperAds getAdsMe();
 
-    FullAds getFullAds(Long id);
+    FullAds getFullAds(int id);
 
     AdsDto addAds(CreateAds ads, Image images);
 }

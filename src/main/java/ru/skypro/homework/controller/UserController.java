@@ -225,7 +225,7 @@ public class UserController {
             tags = TAG_USER_CONTROLLER
     )
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUser(@PathVariable Long id){
+    public ResponseEntity<?> getUser(@PathVariable Integer id){
         logger.info("Get users with id = " + id);
         return ResponseEntity.ok(userService.getUserDto(id));
     }

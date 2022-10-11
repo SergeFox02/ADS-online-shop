@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserById(Long userId) {
+    public User findUserById(int userId) {
         return userRepository.findById(userId).orElse(new User());
     }
 
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteUser(Long userId) {
+    public boolean deleteUser(int userId) {
         if (userRepository.findById(userId).isPresent()) {
             userRepository.deleteById(userId);
             return true;
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserDto(long id) {
+    public UserDto getUserDto(int id) {
         if (userRepository.findById(id).isPresent()){
             return userMapper.toUserDto(userRepository.findById(id).get());
         }

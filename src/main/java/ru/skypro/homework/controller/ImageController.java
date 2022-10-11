@@ -29,7 +29,7 @@ public class ImageController {
     private final ImageService imageService;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> getImage(@PathVariable Long id){
+    public ResponseEntity<?> getImage(@PathVariable Integer id){
         logger.info("Call method getImage");
         Image image = imageService.findImage(id);
 

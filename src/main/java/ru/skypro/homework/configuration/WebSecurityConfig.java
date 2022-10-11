@@ -13,10 +13,11 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import ru.skypro.homework.service.impl.UserServiceImpl;
 
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class WebSecurityConfig {
 
     private static final String[] AUTH_WHITELIST = {
@@ -56,6 +57,7 @@ public class WebSecurityConfig {
                         .mvcMatchers(AUTH_WHITELIST).permitAll()
                         .mvcMatchers("/users/**", "ads/**").authenticated()
                 )
+                .httpBasic(withDefaults())
                 .build();
     }
 }

@@ -45,7 +45,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public Ads findAdsById(long id) {
+    public Ads findAdsById(int id) {
         if (adsRepository.findById(id).isEmpty()){
             return null;
         }
@@ -64,7 +64,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public FullAds getFullAds(Long id) {
+    public FullAds getFullAds(int id) {
         if (adsRepository.findById(id).isEmpty()){
             return null;
         }
