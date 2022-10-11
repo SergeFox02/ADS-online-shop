@@ -7,8 +7,12 @@ import java.io.IOException;
 
 public interface ImageService {
 
-    void upLoadImage(Long id, MultipartFile file) throws IOException;
+    Image upLoadImage(MultipartFile file) throws IOException;
 
-    Image findImage(Long avatarId);
+    Image findImage(Long Id);
+
+    void deleteImage(Long id);
+
+    Image updateImage(Long id, MultipartFile file);
 
 }

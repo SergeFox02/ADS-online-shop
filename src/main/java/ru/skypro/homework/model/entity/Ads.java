@@ -23,9 +23,13 @@ public class Ads {
 
     private String description;
 
-    @Lob
-    @Type(type = "org.hibernate.type.TextType")
-    private String image;
+//    @Lob
+//    @Type(type = "org.hibernate.type.TextType")
+//    private String image;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private Image image;
 
     private Long price;
 
@@ -61,11 +65,20 @@ public class Ads {
         this.description = description;
     }
 
-    public String getImage() {
+//    public String getImage() {
+//        return image;
+//    }
+//
+//    public void setImage(String image) {
+//        this.image = image;
+//    }
+
+
+    public Image getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(Image image) {
         this.image = image;
     }
 

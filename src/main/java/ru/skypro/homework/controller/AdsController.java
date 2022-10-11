@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.model.dto.*;
 import ru.skypro.homework.model.entity.Ads;
 import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.PictureService;
 
 @CrossOrigin(
         value = "http://localhost:3000",
@@ -28,8 +29,11 @@ public class AdsController {
 
     private final AdsService adsService;
 
-    public AdsController(AdsService adsService) {
+    private final PictureService pictureService;
+
+    public AdsController(AdsService adsService, PictureService pictureService) {
         this.adsService = adsService;
+        this.pictureService = pictureService;
     }
 
     @Operation(
@@ -108,7 +112,7 @@ public class AdsController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = CreateAds.class)
+                            schema = @Schema(implementation = CreateAdsDto.class)
                     )
             ),
             responses = {
@@ -273,7 +277,7 @@ public class AdsController {
                             description = "OK",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = FullAds.class)
+                                    schema = @Schema(implementation = FullAdsDto.class)
                             )
                     )
             },
@@ -301,6 +305,11 @@ public class AdsController {
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateAds(@PathVariable Long id){
         return ResponseEntity.ok("Update Ads pk = " + id);
+    }
+
+    @GetMapping("/pictures/{id}")
+    public ResponseEntity<?> getImage(@PathVariable Long id) {
+        return ResponseEntity.ok(pictureService.getPicture(id));
     }
 
 }

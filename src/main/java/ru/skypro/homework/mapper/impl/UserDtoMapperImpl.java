@@ -38,13 +38,13 @@ public class UserDtoMapperImpl implements UserDtoMapper, UserMapper {
     }
 
     @Override
-    public User regReqToUserMapping(RegisterReq registerReq, Role role) {
+    public User regReqToUserMapping(RegisterReq registerReq) {
         User user = new User();
 
         if (userService.findUserByEmail(registerReq.getUsername()).isPresent()) {
             user = userService.findUserByEmail(registerReq.getUsername()).get();
         } else {
-            user.setEmail(registerReq.getUsername());
+            user.setUsername(registerReq.getUsername());
             if (registerReq.getFirstName() == null) {
                 user.setFirstName("Не задано");
             } else {
@@ -70,7 +70,33 @@ public class UserDtoMapperImpl implements UserDtoMapper, UserMapper {
 
     @Override
     public User toUser(RegisterReq registerReq) {
-        return null;
+        User user = new User();
+
+        if (userService.findUserByEmail(registerReq.getUsername()).isPresent()) {
+            user = userService.findUserByEmail(registerReq.getUsername()).get();
+        } else {
+            user.setUsername(registerReq.getUsername());
+            if (registerReq.getFirstName() == null) {
+                user.setFirstName("Не задано");
+            } else {
+                user.setFirstName(registerReq.getFirstName());
+            }
+            if (registerReq.getLastName() == null) {
+                user.setLastName("Не задано");
+            } else {
+                user.setLastName(registerReq.getLastName());
+            }
+            user.setPassword(registerReq.getPassword());
+            user.setRole(Role.USER);
+
+            if (registerReq.getPhone() == null) {
+                user.setPhone("Не задано");
+            } else {
+                user.setPhone(registerReq.getPhone());
+            }
+            userService.saveUser(user);
+        }
+        return user;
     }
 
     @Override
@@ -79,7 +105,7 @@ public class UserDtoMapperImpl implements UserDtoMapper, UserMapper {
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setPhone(userDto.getPhone());
-        user.setEmail(userDto.getEmail());
+        user.setUsername(userDto.getEmail());
         user.setPassword(encoder.encode(user.getPassword()));
 
         userService.saveUser(user);

@@ -14,7 +14,7 @@ public interface UserDtoMapper {
 
     User UserDtoToUser(UserDto userDto);
 
-    User regReqToUserMapping(RegisterReq registerReq, Role role);
+    User regReqToUserMapping(RegisterReq registerReq);
 
     User loginReqToUserMapping(LoginReq loginReq);
 

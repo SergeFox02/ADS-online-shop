@@ -89,19 +89,19 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, UserServiceImpl userService) throws Exception {
-        return http
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .csrf().disable()
-                .cors().disable()
-                .userDetailsService(userService)
-                .httpBasic(withDefaults())
-                .authorizeHttpRequests((authz) -> authz
-                        .mvcMatchers(AUTH_WHITELIST).permitAll()
-                        .mvcMatchers("/users/**").authenticated()
-                )
-                .build();
-    }
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http, UserServiceImpl userService) throws Exception {
+//        return http
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+//                .csrf().disable()
+//                .cors().disable()
+//                .userDetailsService(userService)
+//                .httpBasic(withDefaults())
+//                .authorizeHttpRequests((authz) -> authz
+//                        .mvcMatchers(AUTH_WHITELIST).permitAll()
+//                        .mvcMatchers("/users/**").authenticated()
+//                )
+//                .build();
+//    }
 }
 
