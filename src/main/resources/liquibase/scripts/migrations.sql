@@ -38,11 +38,11 @@ CREATE TABLE comments
 
 -- changeSet Serge:4
 CREATE TABLE image(
-                       id           bigserial   NOT NULL    PRIMARY KEY,
-                       file_path    text        NOT NULL    UNIQUE,
-                       file_size    bigint      NOT NULL,
-                       media_type   text        NOT NULL,
-                       data         bytea       NOT NULL
+                       id           bigserial NOT NULL PRIMARY KEY,
+                       file_path    text NOT NULL UNIQUE,
+                       file_size    bigint NOT NULL,
+                       media_type   text NOT NULL,
+                       data         bytea NOT NULL
 );
 
 -- changeSet Serge:5
@@ -55,5 +55,8 @@ ALTER TABLE ads RENAME COLUMN pk TO id;
 ALTER TABLE ads RENAME COLUMN image TO image_id;
 
 -- changeSet Serge:8
-ALTER TABLE ads ALTER COLUMN image_id TYPE bigint USING image_id::bigint;
+ALTER TABLE ads ALTER COLUMN image_id TYPE bigint USING image_id ::bigint;
+
+-- changeSet Serge:9
+ALTER TABLE ads ADD CONSTRAINT imageIdReferences FOREIGN KEY (image_id) REFERENCES image(id);
 

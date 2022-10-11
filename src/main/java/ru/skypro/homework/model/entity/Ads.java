@@ -1,7 +1,6 @@
 package ru.skypro.homework.model.entity;
 
 import lombok.*;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -29,7 +28,7 @@ public class Ads {
 
     private Long price;
 
-//    @Transient
+    @Transient
     @OneToMany(mappedBy = "ads", cascade = CascadeType.ALL)
     private Collection<Comment> comments;
 
@@ -57,7 +56,6 @@ public class Ads {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
-                ", comments=" + comments +
                 ", author=" + author +
                 '}';
     }

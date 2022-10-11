@@ -3,7 +3,6 @@ package ru.skypro.homework.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.model.dto.CreateAds;
@@ -53,15 +52,6 @@ public class AdsServiceImpl implements AdsService {
         return adsRepository.findById(id).get();
     }
 
-//    @Override
-//    public CreateAds createAds(CreateAds createAds) {
-//        logger.info("call create user in AdsService");
-//        Ads newAds = adsMapper.toAds(createAds);
-//        newAds.setAuthor((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-//        adsRepository.save(newAds);
-//        return createAds;
-//    }
-
     @Override
     public ResponseWrapperAds getAdsMe() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -83,10 +73,13 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDto addAds(CreateAds ads, Image images) {
-        logger.info("Trying to add new ad");
+    public AdsDto addAds(CreateAds ads, Image image) {
+        logger.info("Trying to add new ads");
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Ads newAds = adsMapper.newAds(ads, user, images);
+        Ads newAds = adsMapper.newAds(ads, user, image);
+        newAds.setAuthor(user);
+        newAds.setImage(image);
+        logger.info("set image in ads");
         Ads response = adsRepository.save(newAds);
         logger.info("The ad with pk = {} was saved ", response.getId());
 

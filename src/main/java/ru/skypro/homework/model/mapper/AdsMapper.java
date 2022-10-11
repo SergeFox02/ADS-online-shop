@@ -19,7 +19,7 @@ public interface AdsMapper {
 
     Ads toAds(CreateAds createAds);
 
-    @Mapping(source = "ads.id", target ="pk")
+    @Mapping(source = "user.id", target ="pk")
     @Mapping(source = "user.firstName", target ="authorFirstName")
     @Mapping(source = "user.lastName", target ="authorLastName")
     @Mapping(target = "image", expression = "java(\"http://127.0.0.1:8080/ads/image/\" + ads.getImage().getId())")

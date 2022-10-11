@@ -5,22 +5,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.model.entity.Ads;
 import ru.skypro.homework.model.entity.Image;
 import ru.skypro.homework.model.mapper.ImageMapper;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.ImageService;
 
-import javax.imageio.ImageIO;
 import javax.transaction.Transactional;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 @Transactional
@@ -30,7 +22,7 @@ public class ImageServiceImpl implements ImageService {
     private final ImageMapper imageMapper;
     private final AdsService adsService;
 
-    @Value(value = "${images.dir.path}")
+    @Value(value = "${images.dir.path")
     private String imagesDir;
 
     Logger logger = LoggerFactory.getLogger(ImageServiceImpl.class);

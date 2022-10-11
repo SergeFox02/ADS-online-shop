@@ -20,7 +20,7 @@ import java.io.*;
         allowCredentials = "true",
         allowedHeaders = "*",
         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
-@RequestMapping("ads/image")
+@RequestMapping("image")
 @RequiredArgsConstructor
 public class ImageController {
 
