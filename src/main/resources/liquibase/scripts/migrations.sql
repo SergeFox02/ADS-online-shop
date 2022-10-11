@@ -44,3 +44,24 @@ CREATE TABLE images(
 
 -- changeSet algmironov:3
 ALTER TABLE ads add column image_id bigserial references images(id);
+
+-- changeSet algmironov:4
+ALTER TABLE users
+    add column enabled boolean default 'TRUE';
+
+-- changeSet algmironov:5
+CREATE TABLE authorities
+(
+    username VARCHAR(50) NOT NULL,
+    authority VARCHAR(68) NOT NULL
+);
+
+-- changeSet algmironov:6
+ALTER TABLE users
+    ALTER COLUMN first_name DROP NOT NULL;
+
+ALTER TABLE users
+    ALTER COLUMN last_name DROP NOT NULL;
+
+ALTER TABLE users
+    ALTER COLUMN phone DROP NOT NULL;

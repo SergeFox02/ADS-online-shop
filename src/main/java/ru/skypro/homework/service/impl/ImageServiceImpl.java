@@ -45,7 +45,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image upLoadImage(MultipartFile file) throws IOException {
         logger.info("Uploading new image");
-        return imageRepository.saveAndFlush(convertImageFromFile(file));
+        return imageRepository.save(convertImageFromFile(file));
     }
 
     @Override

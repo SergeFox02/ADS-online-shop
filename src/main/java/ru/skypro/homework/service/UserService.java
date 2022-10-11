@@ -3,6 +3,7 @@ package ru.skypro.homework.service;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import ru.skypro.homework.model.dto.UserDto;
 import ru.skypro.homework.model.entity.User;
 
 import java.util.List;
@@ -19,10 +20,13 @@ public interface UserService extends UserDetailsService {
 
     boolean saveUser(User user);
 
+    User saveUser(UserDto userDto, String password);
+
     boolean deleteUser(Long userId);
 
     boolean isPresent(String username);
-
     User updateUser(User user);
+
+    UserDto toUserDto(User user);
 
 }

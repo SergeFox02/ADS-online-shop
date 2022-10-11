@@ -29,8 +29,8 @@ public class User implements UserDetails {
     @Column
     private String phone;
 
-
-//    private boolean enabled;
+    @Column
+    private boolean enabled;
 
     @Column
     @Enumerated(value = EnumType.STRING)
@@ -101,6 +101,14 @@ public class User implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean getEnabled() {
+        return enabled;
     }
 
     @Override

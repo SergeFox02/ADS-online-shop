@@ -38,4 +38,14 @@ public interface AdsMapper {
     @Mapping(target = "image", expression = "java(\"http://127.0.0.1:8080/image/\" + ads.getImage().getPk())")
     FullAdsDto getAdsDto(Ads ads);
 
+    @Mapping(target ="pk", expression = "java(ads.getId())")
+    @Mapping(target ="authorFirstName", expression = "java(user.getFirstName())")
+    @Mapping(target ="authorLastName", expression = "java(user.getLastName())")
+    @Mapping(target = "image", expression = "java(\"http://127.0.0.1:8080/image/\" + ads.getImage().getId())")
+    FullAdsDto toFullAds(Ads ads, User user);
+
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "comments", ignore = true)
+    Ads newAds(CreateAdsDto createAds, User author, Image image);
 }

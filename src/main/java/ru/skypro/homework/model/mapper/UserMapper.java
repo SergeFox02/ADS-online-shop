@@ -12,9 +12,12 @@ import ru.skypro.homework.model.dto.*;
 @Component
 public interface UserMapper {
 
+
     User toUser(RegisterReq registerReq);
 
     User toUser(UserDto userDto);
 
     User toUser(LoginReq loginReq);
+
+    UserDto toUserDto(User user);
 }

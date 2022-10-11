@@ -4,6 +4,7 @@ package ru.skypro.homework.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,7 +12,6 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.model.dto.*;
 import ru.skypro.homework.model.entity.Role;
-import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.model.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
@@ -46,10 +46,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean login(String userName, String password) {
-        if (!userService.isPresent(userName)) {
+        if (!manager.userExists(userName)) {
             return false;
         }
-        UserDetails userDetails = userService.loadUserByUsername(userName);
+        UserDetails userDetails = manager.loadUserByUsername(userName);
         String encryptedPassword = userDetails.getPassword();
         return encoder.matches(password, encryptedPassword);
     }
@@ -60,13 +60,24 @@ public class AuthServiceImpl implements AuthService {
             logger.info("User already registered!");
             return false;
         }
-        logger.info("Registering new user");
-        User newUser = userMapper.toUser(registerReq);
 
-        newUser.setRole(Role.USER);
-        newUser.setPassword(encoder.encode(registerReq.getPassword()));
-        manager.createUser(newUser);
-        userService.saveUser(newUser);
+        UserDetails userDetails = User.builder()
+                .password(encoder.encode(registerReq.getPassword()))
+                .username(registerReq.getUsername())
+                .roles(Role.USER.name())
+                .build();
+
+        manager.createUser(userDetails);
+        logger.info("Registering new user");
+
+        UserDto userDto = new UserDto();
+        userDto.setEmail(userDetails.getUsername());
+        userDto.setFirstName(registerReq.getFirstName());
+        userDto.setLastName(registerReq.getLastName());
+        userDto.setPhone(registerReq.getPhone());
+
+        userService.saveUser(userDto, userDetails.getPassword());
+
         return true;
     }
 

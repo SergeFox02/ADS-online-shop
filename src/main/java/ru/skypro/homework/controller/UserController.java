@@ -5,20 +5,17 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.mapper.UserDtoMapper;
 import ru.skypro.homework.model.dto.NewPassword;
-import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.model.dto.UserDto;
-import ru.skypro.homework.mapper.UserDtoMapper;
+import ru.skypro.homework.model.entity.User;
+import ru.skypro.homework.model.mapper.UserMapper;
 import ru.skypro.homework.service.UserService;
 
 import java.util.logging.Logger;
@@ -32,10 +29,10 @@ public class UserController {
     Logger logger = Logger.getLogger(String.valueOf(UserController.class));
 
     private final UserService userService;
-    private final UserDtoMapper userMapper;
+    private final UserMapper userMapper;
 
     public UserController(UserService userService,
-                          UserDtoMapper userMapper) {
+                          UserMapper userMapper) {
         this.userService = userService;
         this.userMapper = userMapper;
     }
@@ -69,12 +66,15 @@ public class UserController {
             },
             tags = TAG_USER_CONTROLLER
     )
+
     @GetMapping("/me")
-    public ResponseEntity<UserDto> getUsers(Authentication auth) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByEmail(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+    public ResponseEntity<UserDto> getUserMe() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User result = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        User user = userService.findUserByEmail(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found!"));
         logger.info("Get me method called");
-        return ResponseEntity.ok(userMapper.userToDtoMapper(user));
+
+        return ResponseEntity.ok(userService.toUserDto(result));
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -166,7 +166,7 @@ public class UserController {
         user.setFirstName(userDto.getFirstName());
         User updatedUser = userService.updateUser(user);
 
-        return ResponseEntity.ok(userMapper.userToDtoMapper(updatedUser));
+        return ResponseEntity.ok(userMapper.toUserDto(updatedUser));
     }
 
     @Operation(
