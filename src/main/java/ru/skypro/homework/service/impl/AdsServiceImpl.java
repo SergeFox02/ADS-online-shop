@@ -77,9 +77,7 @@ public class AdsServiceImpl implements AdsService {
         logger.info("Trying to add new ads");
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Ads newAds = adsMapper.newAds(ads, user, image);
-        newAds.setAuthor(user);
-        newAds.setImage(image);
-        logger.info("set image in ads");
+        logger.info("set newAds {}", newAds);
         Ads response = adsRepository.save(newAds);
         logger.info("The ad with pk = {} was saved ", response.getId());
 

@@ -52,7 +52,7 @@ public class Ads {
     @Override
     public String toString() {
         return "Ads{" +
-                "pk=" + id +
+                "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
