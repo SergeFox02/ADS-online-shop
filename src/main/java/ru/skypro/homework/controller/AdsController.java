@@ -182,8 +182,8 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @GetMapping("/{ad_pk}/comment")
-    public ResponseEntity<?> getAdsComments(@PathVariable Long ad_pk){
-        return ResponseEntity.ok("Get Ads comments pk = " + ad_pk);
+    public ResponseEntity<?> getAdsComments(@PathVariable Integer ad_pk){
+        return ResponseEntity.ok(adsService.getAdsComments(ad_pk));
     }
 
     @Operation(

@@ -5,18 +5,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.model.dto.CreateAds;
-import ru.skypro.homework.model.dto.FullAds;
-import ru.skypro.homework.model.dto.ResponseWrapperAds;
-import ru.skypro.homework.model.dto.AdsDto;
+import ru.skypro.homework.model.dto.*;
 import ru.skypro.homework.model.entity.Ads;
 import ru.skypro.homework.model.entity.Image;
 import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.model.mapper.AdsMapper;
+import ru.skypro.homework.model.mapper.CommentsMapper;
 import ru.skypro.homework.repository.AdsRepository;
+import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdsService;
-import ru.skypro.homework.service.UserService;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -31,8 +29,9 @@ public class AdsServiceImpl implements AdsService {
 
     private final AdsRepository adsRepository;
     private final UserRepository userRepository;
-    private final UserService userService;
+    private final CommentRepository commentRepository;
     private final AdsMapper adsMapper;
+    private final CommentsMapper commentsMapper;
 
     Logger logger = LoggerFactory.getLogger(AdsServiceImpl.class);
 
@@ -83,5 +82,17 @@ public class AdsServiceImpl implements AdsService {
         logger.info("The ad with pk = {} was saved ", response.getId());
 
         return adsMapper.toAdsDto(response);
+    }
+
+    @Override
+    public ResponseWrapperAdsComment getAdsComments(int adsId) {
+        if (adsRepository.findById(adsId).isEmpty()){
+            return null;
+        }
+        Collection<AdsComment> commentDtoCollection = commentRepository.findAll().stream()
+                .filter(c -> c.getAds().getId() == adsId)
+                .map(commentsMapper::toAdsComment)
+                .collect(Collectors.toList());
+        return new ResponseWrapperAdsComment(commentDtoCollection);
     }
 }
