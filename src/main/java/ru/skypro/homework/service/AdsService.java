@@ -13,8 +13,6 @@ public interface AdsService {
 
     Ads findAdsById(int id);
 
-//    CreateAds createAds(CreateAds createAds);
-
     ResponseWrapperAds getAdsMe();
 
     FullAds getFullAds(int id);

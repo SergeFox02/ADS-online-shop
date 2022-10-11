@@ -69,6 +69,7 @@ public class AdsServiceImpl implements AdsService {
             return null;
         }
         Ads getAds = adsRepository.findById(id).get();
+        logger.info("Call get ads and fullAdsMap");
         return adsMapper.toFullAds(getAds, userRepository.findById(getAds.getAuthor().getId()).get());
     }
 

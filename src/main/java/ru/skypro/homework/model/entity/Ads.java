@@ -23,7 +23,7 @@ public class Ads {
     private String description;
 
     @JoinColumn(name = "image_id")
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private Image image;
 
     private Integer price;

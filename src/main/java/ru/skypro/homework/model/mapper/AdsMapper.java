@@ -12,17 +12,15 @@ import ru.skypro.homework.model.entity.User;
 @Mapper(componentModel = "spring")
 public interface AdsMapper {
 
-    @Mapping(source = "author.id", target = "author")
-    @Mapping(source = "id", target = "pk")
+    @Mapping(target = "pk", source = "id")
+    @Mapping(target = "author", source = "author.id")
     @Mapping(target = "image", expression = "java(\"/image/\" + ads.getImage().getId())")
     AdsDto toAdsDto(Ads ads);
 
-    Ads toAds(CreateAds createAds);
-
-    @Mapping(source = "user.id", target ="pk")
-    @Mapping(source = "user.firstName", target ="authorFirstName")
-    @Mapping(source = "user.lastName", target ="authorLastName")
-    @Mapping(target = "image", expression = "java(\"http://127.0.0.1:8080/ads/image/\" + ads.getImage().getId())")
+    @Mapping(target ="pk", expression = "java(ads.getId())")
+    @Mapping(target ="authorFirstName", expression = "java(user.getFirstName())")
+    @Mapping(target ="authorLastName", expression = "java(user.getLastName())")
+    @Mapping(target = "image", expression = "java(\"http://127.0.0.1:8080/image/\" + ads.getImage().getId())")
     FullAds toFullAds(Ads ads, User user);
 
 
