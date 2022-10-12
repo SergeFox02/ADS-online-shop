@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.dto.*;
 import ru.skypro.homework.model.entity.Ads;
 import ru.skypro.homework.model.entity.Image;
+import ru.skypro.homework.service.AdsCommentsService;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.ImageService;
 
@@ -35,10 +36,12 @@ public class AdsController {
 
     private final AdsService adsService;
     private final ImageService imageService;
+    private final AdsCommentsService adsCommentsService;
 
-    public AdsController(AdsService adsService, ImageService imageService) {
+    public AdsController(AdsService adsService, ImageService imageService, AdsCommentsService adsCommentsService) {
         this.adsService = adsService;
         this.imageService = imageService;
+        this.adsCommentsService = adsCommentsService;
     }
 
     @Operation(
@@ -211,8 +214,8 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @PostMapping("/{ad_pk}/comments")
-    public ResponseEntity<?> addAdsComment(@PathVariable Long ad_pk){
-        return ResponseEntity.ok("Add Ads comment pk = " + ad_pk);
+    public ResponseEntity<?> addAdsComment(@PathVariable Integer ad_pk, @RequestBody AdsComment adsComment){
+        return ResponseEntity.ok(adsCommentsService.addComment(ad_pk, adsComment));
     }
 
     @Operation(

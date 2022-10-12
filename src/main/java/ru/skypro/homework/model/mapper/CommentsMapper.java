@@ -11,4 +11,8 @@ public interface CommentsMapper {
     @Mapping(target ="author", source = "author.id")
     @Mapping(target ="dateTime", source = "createdAt")
     AdsComment toAdsComment(Comment comment);
+
+    @Mapping(target ="author.id", source = "author")
+    @Mapping(target ="createdAt", source = "dateTime")
+    Comment toComment(AdsComment Adscomment);
 }
