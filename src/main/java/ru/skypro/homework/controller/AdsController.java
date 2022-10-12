@@ -72,9 +72,9 @@ public class AdsController {
     )
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseWrapperAds getAllAds(){
+    public ResponseEntity<?> getAllAds(){
         logger.info("Call getAllAds");
-        return adsService.getAllAds();
+        return ResponseEntity.ok(adsService.getAllAds());
     }
 
     @Operation(
@@ -107,7 +107,11 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @GetMapping("/me")
-    public ResponseEntity<?> getAdsMe(){
+    public ResponseEntity<?> getAdsMe(@RequestParam(required = false) Boolean authenticated,
+                                      @RequestParam(required = false) String authority,
+                                      @RequestParam(required = false) Object credentials,
+                                      @RequestParam(required = false) Object details,
+                                      @RequestParam(required = false) Object principal) {
         logger.info("Call ads/me");
         return ResponseEntity.ok(adsService.getAdsMe());
     }
@@ -181,7 +185,7 @@ public class AdsController {
             },
             tags = TAG_ADS_CONTROLLER
     )
-    @GetMapping("/{ad_pk}/comment")
+    @GetMapping("/{ad_pk}/comments")
     public ResponseEntity<?> getAdsComments(@PathVariable Integer ad_pk){
         return ResponseEntity.ok(adsService.getAdsComments(ad_pk));
     }
@@ -206,7 +210,7 @@ public class AdsController {
             },
             tags = TAG_ADS_CONTROLLER
     )
-    @PostMapping("/{ad_pk}/comment")
+    @PostMapping("/{ad_pk}/comments")
     public ResponseEntity<?> addAdsComment(@PathVariable Long ad_pk){
         return ResponseEntity.ok("Add Ads comment pk = " + ad_pk);
     }
@@ -225,7 +229,7 @@ public class AdsController {
             },
             tags = TAG_ADS_CONTROLLER
     )
-    @DeleteMapping("/{ad_pk}/comment/{id}")
+    @DeleteMapping("/{ad_pk}/comments/{id}")
     public ResponseEntity<?> deleteAdsComment(@PathVariable Long ad_pk, @PathVariable Long id){
         return ResponseEntity.ok("Delete Ads comment pk = " + ad_pk + "; comment pk = " + id);
     }
@@ -244,7 +248,7 @@ public class AdsController {
             },
             tags = TAG_ADS_CONTROLLER
     )
-    @GetMapping("/{ad_pk}/comment/{id}")
+    @GetMapping("/{ad_pk}/comments/{id}")
     public ResponseEntity<?> getAdsComment(@PathVariable Long ad_pk, @PathVariable Long id){
         return ResponseEntity.ok("Get Ads comment pk = " + ad_pk + "; comment pk = " + id);
     }
@@ -263,7 +267,7 @@ public class AdsController {
             },
             tags = TAG_ADS_CONTROLLER
     )
-    @PatchMapping("/{ad_pk}/comment/{id}")
+    @PatchMapping("/{ad_pk}/comments/{id}")
     public ResponseEntity<?> updateAdsComment(@PathVariable Long ad_pk, @PathVariable Long id){
         return ResponseEntity.ok("Update Ads comment pk = " + ad_pk + "; comment pk = " + id);
     }
