@@ -14,8 +14,8 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String email;
+    @Column(name = "username")
+    private String username;
 
     @Column
     private String password;
@@ -28,6 +28,9 @@ public class User implements UserDetails {
 
     @Column
     private String phone;
+
+    @Column
+    private boolean enabled;
 
     @Column
     @Enumerated(value = EnumType.STRING)
@@ -47,8 +50,8 @@ public class User implements UserDetails {
         return createdAds;
     }
 
-    public User(String email, String password, String firstName, String lastName, String phone) {
-        this.email = email;
+    public User(String username, String password, String firstName, String lastName, String phone) {
+        this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -67,12 +70,8 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
@@ -86,7 +85,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override
@@ -102,6 +101,14 @@ public class User implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean getEnabled() {
+        return enabled;
     }
 
     @Override

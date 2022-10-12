@@ -1,9 +1,13 @@
 package ru.skypro.homework.model.dto;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
-public class FullAds {
+@Getter
+@Setter
+public class FullAdsDto {
 
     private Long pk;
     private String authorFirstName;

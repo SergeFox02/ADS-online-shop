@@ -3,7 +3,7 @@ package ru.skypro.homework.model.entity;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
+@Entity(name = "images")
 public class Image {
 
     @Id
@@ -90,5 +90,9 @@ public class Image {
                 ", mediaType='" + mediaType + '\'' +
                 ", ads=" + ads +
                 '}';
+    }
+
+    public String getPk() {
+        return id.toString();
     }
 }

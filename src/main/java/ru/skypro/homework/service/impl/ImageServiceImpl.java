@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.entity.Image;
+import ru.skypro.homework.model.mapper.ImageMapper;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.ImageService;
@@ -17,6 +18,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional
@@ -25,65 +27,58 @@ public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
     private final AdsService adsService;
 
+    private final ImageMapper imageMapper;
+
     @Value(value = "${images.dir.path}")
     private String imagesDir;
 
     Logger logger = LoggerFactory.getLogger(ImageServiceImpl.class);
 
-    public ImageServiceImpl(ImageRepository imageRepository, AdsService adsService) {
+    public ImageServiceImpl(ImageRepository imageRepository,
+                            AdsService adsService,
+                            ImageMapper imageMapper) {
         this.imageRepository = imageRepository;
         this.adsService = adsService;
+        this.imageMapper = imageMapper;
     }
 
     @Override
-    public void upLoadImage(Long adsPk, MultipartFile file) throws IOException {
-
-        logger.info("Was invoked method for upload image of ads");
-//        Ads ads = adsService.findAds(adsPk);
-//        Path filePath = Path.of(imagesDir, adsPk + "." + getExtension(file.getOriginalFilename()));
-//        Files.createDirectories(filePath.getParent());
-//        Files.deleteIfExists(filePath);
-//
-//        try (InputStream is = file.getInputStream();
-//             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
-//             BufferedInputStream bis = new BufferedInputStream(is, 1024);
-//             BufferedOutputStream bos = new BufferedOutputStream(os, 1024)
-//        ) {
-//            bis.transferTo(bos);
-//        }
-//
-//        Image image = findImage(adsPk);
-//        image.setAds(ads);
-//        image.setFilePath(filePath.toString());
-//        image.setFileSize(file.getSize());
-//        image.setMediaType(file.getContentType());
-//        image.setData(generateImagePreview(filePath));
-//
-//        imageRepository.save(image);
+    public Image upLoadImage(MultipartFile file) throws IOException {
+        logger.info("Uploading new image");
+        return imageRepository.save(convertImageFromFile(file));
     }
 
     @Override
     public Image findImage(Long imageId) {
-        logger.info("Was invoked method for find image by id = {}", imageId);
-        return imageRepository.findById(imageId).orElse(new Image());
+        logger.info("Attempting to find image by id = {}", imageId);
+        return imageRepository.findById(imageId)
+                .orElseThrow(() -> {
+                    logger.warn("There is no image with such id: {}", imageId);
+                    return new NoSuchElementException("There is no image with such id found!");
+                });
     }
 
-    private byte[] generateImagePreview(Path filePath) throws IOException {
-        try (InputStream is = Files.newInputStream(filePath);
-             BufferedInputStream bis = new BufferedInputStream(is, 1024);
-             ByteArrayOutputStream baos = new ByteArrayOutputStream()
-        ) {
-            BufferedImage image = ImageIO.read(bis);
+    @Override
+    @Transactional
+    public void deleteImage(Long id) {
+        logger.info("Deleting image with id: {}", id);
+        imageRepository.deleteById(id);
+    }
 
-            int height = image.getHeight() / (image.getWidth() / 100);
-            BufferedImage preview = new BufferedImage(100, height, image.getType());
-            Graphics2D graphics = preview.createGraphics();
-            graphics.drawImage(image, 0, 0, 100, height, null);
-            graphics.dispose();
+    @Override
+    public Image updateImage(Long id, MultipartFile file) {
+        return imageRepository.saveAndFlush(convertImageFromFile(file));
+    }
 
-            ImageIO.write(preview, getExtension(filePath.getFileName().toString()), baos);
-            return baos.toByteArray();
+    private Image convertImageFromFile(MultipartFile file) {
+        logger.info("Converting image from file");
+        Image image = new Image();
+        try {
+            image = imageMapper.getImageFromFile(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        return image;
     }
 
     private String getExtension(String fileName) {

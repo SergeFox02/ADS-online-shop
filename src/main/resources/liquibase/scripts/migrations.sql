@@ -1,11 +1,11 @@
 -- liquibase formatted sql
 
--- changeset algmironov:1
+-- changeSet algmironov:1
 
 CREATE TABLE users
 (
     id                   SERIAL NOT NULL PRIMARY KEY,
-    email                varchar(255) NOT NULL,
+    username                varchar(255) NOT NULL,
     password             varchar(255) NOT NULL,
     first_name           varchar(255) NOT NULL,
     last_name            varchar(255) NOT NULL,
@@ -13,41 +13,55 @@ CREATE TABLE users
     role                 varchar(255) NOT NULL DEFAULT 'USER'
 );
 
--- changeset algmironov:2
-
 CREATE TABLE ads
 (
-    pk                  SERIAL NOT NULL PRIMARY KEY,
+    id                  SERIAL NOT NULL PRIMARY KEY,
     title               varchar(255) NOT NULL,
     description         TEXT NOT NULL,
-    image               varchar(255) NOT NULL,
-    price               float NOT NULL,
+    price               bigint NOT NULL,
     author              bigint NOT NULL references users(id)
 );
 
--- changeset algmironov:3
-
 CREATE TABLE comments
 (
-    pk                  SERIAL NOT NULL PRIMARY KEY,
+    id                  SERIAL NOT NULL PRIMARY KEY,
     text                TEXT NOT NULL,
     author              bigint NOT NULL references users(id),
-    ads                 bigint NOT NULL references ads(pk),
+    ads                 bigint NOT NULL references ads(id),
     created_at          timestamp NOT NULL
 );
 
--- changeSet Serge:4
-CREATE TABLE image(
+-- changeSet Serge:2
+CREATE TABLE images(
                        id           bigserial   NOT NULL    PRIMARY KEY,
                        file_path    text        NOT NULL    UNIQUE,
                        file_size    bigint      NOT NULL,
                        media_type   text        NOT NULL,
                        data         bytea       NOT NULL,
-                       ads_id       bigint      NOT NULL    UNIQUE
+                       ads_id       bigint      NOT NULL    references ads(id)
 );
 
--- changeSet Serge:5
-ALTER TABLE ads ALTER COLUMN price TYPE bigint;
 
--- changeSet Serge:6
-ALTER TABLE ads RENAME COLUMN pk TO id;
+-- changeSet algmironov:3
+ALTER TABLE ads add column image_id bigserial references images(id);
+
+-- changeSet algmironov:4
+ALTER TABLE users
+    add column enabled boolean default 'TRUE';
+
+-- changeSet algmironov:5
+CREATE TABLE authorities
+(
+    username VARCHAR(50) NOT NULL,
+    authority VARCHAR(68) NOT NULL
+);
+
+-- changeSet algmironov:6
+ALTER TABLE users
+    ALTER COLUMN first_name DROP NOT NULL;
+
+ALTER TABLE users
+    ALTER COLUMN last_name DROP NOT NULL;
+
+ALTER TABLE users
+    ALTER COLUMN phone DROP NOT NULL;

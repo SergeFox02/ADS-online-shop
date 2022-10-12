@@ -6,11 +6,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.model.dto.NewPassword;
+import ru.skypro.homework.model.dto.UserDto;
 import ru.skypro.homework.model.entity.User;
+import ru.skypro.homework.model.mapper.UserMapper;
+import ru.skypro.homework.service.UserService;
+
+import java.util.logging.Logger;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -18,6 +26,16 @@ import ru.skypro.homework.model.entity.User;
 public class UserController {
 
     private final String TAG_USER_CONTROLLER = "Пользователи";
+    Logger logger = Logger.getLogger(String.valueOf(UserController.class));
+
+    private final UserService userService;
+    private final UserMapper userMapper;
+
+    public UserController(UserService userService,
+                          UserMapper userMapper) {
+        this.userService = userService;
+        this.userMapper = userMapper;
+    }
 
     @Operation(
             summary = "updateUser",
@@ -48,11 +66,18 @@ public class UserController {
             },
             tags = TAG_USER_CONTROLLER
     )
+
     @GetMapping("/me")
-    public ResponseEntity<?> getUsers(){
-        return ResponseEntity.ok("Get users");
+    public ResponseEntity<UserDto> getUserMe() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User result = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        User user = userService.findUserByEmail(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+        logger.info("Get me method called");
+
+        return ResponseEntity.ok(userService.toUserDto(result));
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(
             summary = "addUser",
             description = "user",
@@ -133,8 +158,15 @@ public class UserController {
             tags = TAG_USER_CONTROLLER
     )
     @PatchMapping("/me")
-    public ResponseEntity<?> updateUser(){
-        return ResponseEntity.ok("Update user");
+    public ResponseEntity<UserDto> updateUser(Authentication auth, @RequestBody UserDto userDto){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByEmail(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+        user.setPhone(userDto.getPhone());
+        user.setLastName(userDto.getLastName());
+        user.setFirstName(userDto.getFirstName());
+        User updatedUser = userService.updateUser(user);
+
+        return ResponseEntity.ok(userMapper.toUserDto(updatedUser));
     }
 
     @Operation(

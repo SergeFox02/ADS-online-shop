@@ -1,18 +1,27 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.dto.*;
 import ru.skypro.homework.model.entity.Ads;
+import ru.skypro.homework.model.entity.Image;
 import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.ImageService;
+import ru.skypro.homework.service.PictureService;
+
+import javax.validation.Valid;
+import java.io.IOException;
 
 @CrossOrigin(
         value = "http://localhost:3000",
@@ -27,9 +36,15 @@ public class AdsController {
     Logger logger = LoggerFactory.getLogger(AdsController.class);
 
     private final AdsService adsService;
+    private final ImageService imageService;
 
-    public AdsController(AdsService adsService) {
+    private final PictureService pictureService;
+
+    public AdsController(AdsService adsService, PictureService pictureService,
+                         ImageService imageService) {
         this.adsService = adsService;
+        this.pictureService = pictureService;
+        this.imageService = imageService;
     }
 
     @Operation(
@@ -62,9 +77,9 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @GetMapping
-    public ResponseEntity<?> getAllAds(){
+    public ResponseWrapperAds getAllAds(){
         logger.info("Call getAllAds");
-        return ResponseEntity.ok(adsService.getAllAds());
+        return adsService.getAllAds();
     }
 
     @Operation(
@@ -99,7 +114,8 @@ public class AdsController {
     @GetMapping("/me")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<?> getAdsMe(){
-        return ResponseEntity.ok("Get Ads me");
+        logger.info("Call ads/me");
+        return ResponseEntity.ok(adsService.getAdsMe());
     }
 
 
@@ -108,7 +124,7 @@ public class AdsController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = CreateAds.class)
+                            schema = @Schema(implementation = CreateAdsDto.class)
                     )
             ),
             responses = {
@@ -144,8 +160,17 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @PostMapping
-    public ResponseEntity<?> addAds(){
-        return ResponseEntity.ok("Add new ads");
+    public ResponseEntity<?> addAds(@Valid @RequestPart("properties") @Parameter(schema = @Schema(type = "string", format = "binary")) CreateAdsDto ads,
+                                    @RequestPart("image") MultipartFile file) {
+        Image image;
+        try{
+            image = imageService.upLoadImage(file);
+        }catch (IOException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        logger.info("call addAds in controller");
+        return ResponseEntity.ok(adsService.addAds(ads, image));
     }
 
     @Operation(
@@ -273,7 +298,7 @@ public class AdsController {
                             description = "OK",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = FullAds.class)
+                                    schema = @Schema(implementation = FullAdsDto.class)
                             )
                     )
             },
@@ -301,6 +326,11 @@ public class AdsController {
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateAds(@PathVariable Long id){
         return ResponseEntity.ok("Update Ads pk = " + id);
+    }
+
+    @GetMapping("/pictures/{id}")
+    public ResponseEntity<?> getImage(@PathVariable Long id) {
+        return ResponseEntity.ok(pictureService.getPicture(id));
     }
 
 }
