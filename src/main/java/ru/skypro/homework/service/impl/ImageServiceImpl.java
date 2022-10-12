@@ -11,77 +11,57 @@ import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.ImageService;
 
-import javax.imageio.ImageIO;
 import javax.transaction.Transactional;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.NoSuchElementException;
 
 @Service
 @Transactional
 public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
+    private final ImageMapper imageMapper;
     private final AdsService adsService;
 
-    private final ImageMapper imageMapper;
-
-    @Value(value = "${images.dir.path}")
+    @Value(value = "${images.dir.path")
     private String imagesDir;
 
     Logger logger = LoggerFactory.getLogger(ImageServiceImpl.class);
 
-    public ImageServiceImpl(ImageRepository imageRepository,
-                            AdsService adsService,
-                            ImageMapper imageMapper) {
+    public ImageServiceImpl(ImageRepository imageRepository, AdsService adsService, ImageMapper imageMapper) {
         this.imageRepository = imageRepository;
         this.adsService = adsService;
         this.imageMapper = imageMapper;
     }
 
     @Override
-    public Image upLoadImage(MultipartFile file) throws IOException {
-        logger.info("Uploading new image");
-        return imageRepository.save(convertImageFromFile(file));
-    }
-
-    @Override
-    public Image findImage(Long imageId) {
-        logger.info("Attempting to find image by id = {}", imageId);
-        return imageRepository.findById(imageId)
-                .orElseThrow(() -> {
-                    logger.warn("There is no image with such id: {}", imageId);
-                    return new NoSuchElementException("There is no image with such id found!");
-                });
-    }
-
-    @Override
-    @Transactional
-    public void deleteImage(Long id) {
-        logger.info("Deleting image with id: {}", id);
-        imageRepository.deleteById(id);
-    }
-
-    @Override
-    public Image updateImage(Long id, MultipartFile file) {
-        return imageRepository.saveAndFlush(convertImageFromFile(file));
-    }
-
-    private Image convertImageFromFile(MultipartFile file) {
-        logger.info("Converting image from file");
-        Image image = new Image();
+    public Image addImage(MultipartFile file) throws IOException {
+        Image image;
         try {
-            image = imageMapper.getImageFromFile(file);
+            image = imageMapper.fromFile(file);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return image;
+        Image imageSave = imageRepository.save(image);
+        logger.info("New image was saved with id = {}", imageSave.getId());
+
+        return imageSave;
     }
 
-    private String getExtension(String fileName) {
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
+    @Override
+    public Image findImage(int imageId) {
+        logger.info("Was invoked method for find image by id = {}", imageId);
+        return imageRepository.findById(imageId).orElse(new Image());
+    }
+
+    private Image getImages(MultipartFile mediaTypeImages) {
+        logger.info("Trying to add new image");
+        Image image;
+        try {
+            image = imageMapper.fromFile(mediaTypeImages);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return image;
     }
 }

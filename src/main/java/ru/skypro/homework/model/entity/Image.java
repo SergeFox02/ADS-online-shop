@@ -7,24 +7,20 @@ import java.util.Objects;
 public class Image {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     private String filePath;
     private long fileSize;
     private String mediaType;
-
-    @Lob
     private byte[] data;
 
-    @OneToOne
-    private Ads ads;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -60,14 +56,6 @@ public class Image {
         this.data = data;
     }
 
-    public Ads getAds() {
-        return ads;
-    }
-
-    public void setAds(Ads ads) {
-        this.ads = ads;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -88,7 +76,6 @@ public class Image {
                 ", filePath='" + filePath + '\'' +
                 ", fileSize=" + fileSize +
                 ", mediaType='" + mediaType + '\'' +
-                ", ads=" + ads +
                 '}';
     }
 

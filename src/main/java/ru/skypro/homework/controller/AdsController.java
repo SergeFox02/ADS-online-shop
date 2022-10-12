@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.dto.*;
@@ -18,7 +17,6 @@ import ru.skypro.homework.model.entity.Ads;
 import ru.skypro.homework.model.entity.Image;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.ImageService;
-import ru.skypro.homework.service.PictureService;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -38,12 +36,8 @@ public class AdsController {
     private final AdsService adsService;
     private final ImageService imageService;
 
-    private final PictureService pictureService;
-
-    public AdsController(AdsService adsService, PictureService pictureService,
-                         ImageService imageService) {
+    public AdsController(AdsService adsService, ImageService imageService) {
         this.adsService = adsService;
-        this.pictureService = pictureService;
         this.imageService = imageService;
     }
 
@@ -77,9 +71,10 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @GetMapping
-    public ResponseWrapperAds getAllAds(){
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<?> getAllAds(){
         logger.info("Call getAllAds");
-        return adsService.getAllAds();
+        return ResponseEntity.ok(adsService.getAllAds());
     }
 
     @Operation(
@@ -112,8 +107,11 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @GetMapping("/me")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    public ResponseEntity<?> getAdsMe(){
+    public ResponseEntity<?> getAdsMe(@RequestParam(required = false) Boolean authenticated,
+                                      @RequestParam(required = false) String authority,
+                                      @RequestParam(required = false) Object credentials,
+                                      @RequestParam(required = false) Object details,
+                                      @RequestParam(required = false) Object principal) {
         logger.info("Call ads/me");
         return ResponseEntity.ok(adsService.getAdsMe());
     }
@@ -124,7 +122,7 @@ public class AdsController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = CreateAdsDto.class)
+                            schema = @Schema(implementation = CreateAds.class)
                     )
             ),
             responses = {
@@ -160,11 +158,11 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @PostMapping
-    public ResponseEntity<?> addAds(@Valid @RequestPart("properties") @Parameter(schema = @Schema(type = "string", format = "binary")) CreateAdsDto ads,
-                                    @RequestPart("image") MultipartFile file) {
+    public ResponseEntity<?> addAds(@Valid @RequestPart("properties") @Parameter(schema = @Schema(type = "string", format = "binary")) CreateAds ads,
+                @RequestPart("image") MultipartFile file) {
         Image image;
         try{
-            image = imageService.upLoadImage(file);
+            image = imageService.addImage(file);
         }catch (IOException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -187,9 +185,9 @@ public class AdsController {
             },
             tags = TAG_ADS_CONTROLLER
     )
-    @GetMapping("/{ad_pk}/comment")
-    public ResponseEntity<?> getAdsComments(@PathVariable Long ad_pk){
-        return ResponseEntity.ok("Get Ads comments pk = " + ad_pk);
+    @GetMapping("/{ad_pk}/comments")
+    public ResponseEntity<?> getAdsComments(@PathVariable Integer ad_pk){
+        return ResponseEntity.ok(adsService.getAdsComments(ad_pk));
     }
 
     @Operation(
@@ -212,7 +210,7 @@ public class AdsController {
             },
             tags = TAG_ADS_CONTROLLER
     )
-    @PostMapping("/{ad_pk}/comment")
+    @PostMapping("/{ad_pk}/comments")
     public ResponseEntity<?> addAdsComment(@PathVariable Long ad_pk){
         return ResponseEntity.ok("Add Ads comment pk = " + ad_pk);
     }
@@ -231,7 +229,7 @@ public class AdsController {
             },
             tags = TAG_ADS_CONTROLLER
     )
-    @DeleteMapping("/{ad_pk}/comment/{id}")
+    @DeleteMapping("/{ad_pk}/comments/{id}")
     public ResponseEntity<?> deleteAdsComment(@PathVariable Long ad_pk, @PathVariable Long id){
         return ResponseEntity.ok("Delete Ads comment pk = " + ad_pk + "; comment pk = " + id);
     }
@@ -250,7 +248,7 @@ public class AdsController {
             },
             tags = TAG_ADS_CONTROLLER
     )
-    @GetMapping("/{ad_pk}/comment/{id}")
+    @GetMapping("/{ad_pk}/comments/{id}")
     public ResponseEntity<?> getAdsComment(@PathVariable Long ad_pk, @PathVariable Long id){
         return ResponseEntity.ok("Get Ads comment pk = " + ad_pk + "; comment pk = " + id);
     }
@@ -269,7 +267,7 @@ public class AdsController {
             },
             tags = TAG_ADS_CONTROLLER
     )
-    @PatchMapping("/{ad_pk}/comment/{id}")
+    @PatchMapping("/{ad_pk}/comments/{id}")
     public ResponseEntity<?> updateAdsComment(@PathVariable Long ad_pk, @PathVariable Long id){
         return ResponseEntity.ok("Update Ads comment pk = " + ad_pk + "; comment pk = " + id);
     }
@@ -298,15 +296,18 @@ public class AdsController {
                             description = "OK",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = FullAdsDto.class)
+                                    schema = @Schema(implementation = FullAds.class)
                             )
                     )
             },
             tags = TAG_ADS_CONTROLLER
     )
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAds(@PathVariable Long id){
-        return ResponseEntity.ok("Get Ads pk = " + id);
+    public ResponseEntity<?> getAds(@PathVariable Integer id){
+        if (adsService.getFullAds(id) == null){
+            return ResponseEntity.status(404).build();
+        }
+        return ResponseEntity.ok(adsService.getFullAds(id));
     }
 
     @Operation(
@@ -326,11 +327,6 @@ public class AdsController {
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateAds(@PathVariable Long id){
         return ResponseEntity.ok("Update Ads pk = " + id);
-    }
-
-    @GetMapping("/pictures/{id}")
-    public ResponseEntity<?> getImage(@PathVariable Long id) {
-        return ResponseEntity.ok(pictureService.getPicture(id));
     }
 
 }

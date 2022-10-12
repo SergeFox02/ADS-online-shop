@@ -8,33 +8,32 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.model.dto.LoginReq;
-import ru.skypro.homework.model.dto.*;
+import ru.skypro.homework.model.dto.RegisterReq;
 import ru.skypro.homework.model.entity.Role;
 import ru.skypro.homework.service.AuthService;
 
 import static ru.skypro.homework.model.entity.Role.USER;
 
 @Slf4j
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(
+        value = "http://localhost:3000",
+        allowCredentials = "true",
+        allowedHeaders = "*",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController
+@RequiredArgsConstructor
 public class AuthController {
 
     private final String TAG_AUTH_CONTROLLER = "Авторизация";
+
+    Logger logger = LoggerFactory.getLogger(AuthController.class);
     private final AuthService authService;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
-    Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Operation(
             summary = "login",
@@ -76,12 +75,11 @@ public class AuthController {
     )
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginReq req) {
-        logger.info("Attempting to login");
+        logger.info("Call login");
         if (authService.login(req.getUsername(), req.getPassword())) {
-            logger.info("Successfully logged in");
+            logger.info("user is login");
             return ResponseEntity.ok().build();
         } else {
-            logger.warn("Failed to login");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
@@ -126,7 +124,8 @@ public class AuthController {
     )
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterReq req) {
-        if (authService.register(req)) {
+        Role role = req.getRole() == null ? USER : req.getRole();
+        if (authService.register(req, role)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

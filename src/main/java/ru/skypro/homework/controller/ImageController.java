@@ -1,43 +1,52 @@
 package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.entity.Image;
 import ru.skypro.homework.service.ImageService;
 
-import java.io.IOException;
+import java.io.*;
 
-@Slf4j
 @RestController
+@CrossOrigin(
+        value = "http://localhost:3000",
+        allowCredentials = "true",
+        allowedHeaders = "*",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@RequestMapping("image")
 @RequiredArgsConstructor
-@CrossOrigin(value = "http://localhost:3000")
-@RequestMapping("/image")
 public class ImageController {
+
+    Logger logger = LoggerFactory.getLogger(ImageController.class);
+
     private final ImageService imageService;
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public byte[] getImage(@PathVariable Long id) {
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<?> getImage(@PathVariable Integer id){
+        logger.info("Call method getImage");
         Image image = imageService.findImage(id);
-        return image.getData();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(image.getMediaType()));
+        headers.setContentLength(image.getData().length);
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(image.getData());
     }
 
-    @PreAuthorize("!hasRole('ROLE_ANONYMOUS')")
-    @PostMapping(produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public byte[] addImage(@RequestBody MultipartFile file) throws IOException {
-        Image image = imageService.upLoadImage(file);
-
-        return image.getData();
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_USER')")
-    @PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public byte[] updateImage(@RequestBody MultipartFile file, @PathVariable Long id) {
-        Image image = imageService.updateImage(id, file);
-
-        return image.getData();
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> addImage(@RequestParam MultipartFile image) throws IOException {
+        logger.info("Call method addImage");
+        if (image.getSize() > 1024 * 600) {
+            logger.warn("Warning: image is to big");
+            return ResponseEntity.badRequest().body("File is to big");
+        }
+        imageService.addImage(image);
+        return ResponseEntity.ok().build();
     }
 }

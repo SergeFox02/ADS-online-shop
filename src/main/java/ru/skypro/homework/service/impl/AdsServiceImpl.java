@@ -9,61 +9,46 @@ import ru.skypro.homework.model.dto.*;
 import ru.skypro.homework.model.entity.Ads;
 import ru.skypro.homework.model.entity.Image;
 import ru.skypro.homework.model.entity.User;
-
-import ru.skypro.homework.model.mapper.CommentsMapper;
-import ru.skypro.homework.repository.CommentRepository;
-import ru.skypro.homework.service.AdsService;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import ru.skypro.homework.model.mapper.AdsMapper;
+import ru.skypro.homework.model.mapper.CommentsMapper;
 import ru.skypro.homework.repository.AdsRepository;
-import ru.skypro.homework.service.UserService;
+import ru.skypro.homework.repository.CommentRepository;
+import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.AdsService;
 
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import java.util.List;
-
 /**
  * Service for working with Ads
  */
 @Service
+@RequiredArgsConstructor
 public class AdsServiceImpl implements AdsService {
 
-    Logger logger = LoggerFactory.getLogger(AdsServiceImpl.class);
     private final AdsRepository adsRepository;
+    private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
     private final AdsMapper adsMapper;
     private final CommentsMapper commentsMapper;
-    private final CommentRepository commentRepository;
-    private final UserService userService;
 
-    public AdsServiceImpl(AdsRepository adsRepository,
-                          AdsMapper adsMapper,
-                          UserService userService,
-                          CommentRepository commentRepository,
-                          CommentsMapper commentsMapper) {
-        this.adsRepository = adsRepository;
-        this.adsMapper = adsMapper;
-        this.userService = userService;
-        this.commentRepository = commentRepository;
-        this.commentsMapper = commentsMapper;
-    }
+    Logger logger = LoggerFactory.getLogger(AdsServiceImpl.class);
 
     @Override
     public ResponseWrapperAds getAllAds() {
         Collection<AdsDto> adsDtoCollection = adsRepository.findAll().stream()
-                .map(adsMapper::toAdsDto)
+                .map(ads -> adsMapper.toAdsDto(ads))
                 .collect(Collectors.toList());
         return new ResponseWrapperAds(adsDtoCollection);
     }
 
     @Override
     public Ads findAdsById(int id) {
-        if (!adsRepository.findById((long) id).isPresent()){
+        if (adsRepository.findById(id).isEmpty()){
             return null;
         }
-        return adsRepository.findById((long) id).get();
+        return adsRepository.findById(id).get();
     }
 
     @Override
@@ -78,17 +63,17 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public FullAdsDto getFullAds(int id) {
-        if (!adsRepository.findById((long) id).isPresent()){
+    public FullAds getFullAds(int id) {
+        if (adsRepository.findById(id).isEmpty()){
             return null;
         }
-        Ads getAds = adsRepository.findById((long) id).get();
+        Ads getAds = adsRepository.findById(id).get();
         logger.info("Call get ads and fullAdsMap");
-        return adsMapper.toFullAds(getAds, userService.findUserById(getAds.getAuthor().getId()));
+        return adsMapper.toFullAds(getAds, userRepository.findById(getAds.getAuthor().getId()).get());
     }
 
     @Override
-    public AdsDto addAds(CreateAdsDto ads, Image image) {
+    public AdsDto addAds(CreateAds ads, Image image) {
         logger.info("Trying to add new ads");
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Ads newAds = adsMapper.newAds(ads, user, image);
@@ -101,7 +86,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public ResponseWrapperAdsComment getAdsComments(int adsId) {
-        if (!adsRepository.findById((long) adsId).isPresent()){
+        if (adsRepository.findById(adsId).isEmpty()){
             return null;
         }
         Collection<AdsComment> commentDtoCollection = commentRepository.findAll().stream()

@@ -2,22 +2,18 @@ package ru.skypro.homework.model.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.stereotype.Component;
 import ru.skypro.homework.model.dto.UserDto;
 import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.model.dto.LoginReq;
-import ru.skypro.homework.model.dto.*;
+import ru.skypro.homework.model.dto.RegisterReq;
 
 @Mapper(componentModel = "spring")
-@Component
 public interface UserMapper {
 
-
+    @Mapping(target = "email", source = "username")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "comments", ignore = true)
     User toUser(RegisterReq registerReq);
-
-    User toUser(UserDto userDto);
-
-    User toUser(LoginReq loginReq);
 
     UserDto toUserDto(User user);
 }

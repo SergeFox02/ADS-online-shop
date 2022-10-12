@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class FullAdsDto {
 
-    private Long pk;
+    private Integer pk;
     private String authorFirstName;
     private String authorLastName;
     private String description;

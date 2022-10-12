@@ -1,62 +1,41 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.model.dto.UserDto;
+import ru.skypro.homework.model.dto.*;
 import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.model.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.util.Collection;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-
-import static ru.skypro.homework.model.entity.Role.USER;
+import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder encoder;
-
-    @Autowired
-    private UserMapper userMapper;
-
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-        this.encoder = new BCryptPasswordEncoder();
-    }
+    private final UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findUserByUsername(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return userRepository.findUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     @Override
     public Optional<User> findUserByEmail(String email) {
-        return userRepository.findUserByUsername(email);
+        return userRepository.findUserByEmail(email);
     }
 
     @Override
-    public User findUserById(Long userId) {
+    public User findUserById(int userId) {
         return userRepository.findById(userId).orElse(new User());
     }
 
@@ -77,7 +56,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public boolean deleteUser(Long userId) {
+    public boolean deleteUser(int userId) {
         if (userRepository.findById(userId).isPresent()) {
             userRepository.deleteById(userId);
             return true;
@@ -86,33 +65,29 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User updateUser(User user) {
-        return userRepository.saveAndFlush(user);
-    }
-
-    @Override
-    public User saveUser(UserDto userDto, String password) {
-        logger.info("Updating user with username: {}", userDto.getUsername());
-
-            User userToSave = userRepository.findUserByUsername(userDto.getUsername())
-                    .orElse(new User());
-            userToSave.setUsername(userDto.getUsername());
-            userToSave.setPassword(password);
-            userToSave.setFirstName(userDto.getFirstName());
-            userToSave.setLastName(userDto.getLastName());
-            userToSave.setPhone(userDto.getPhone());
-            userToSave.setRole(USER);
-            return userRepository.saveAndFlush(userToSave);
-
-    }
-
-    @Override
     public boolean isPresent(String username) {
-        return userRepository.findUserByUsername(username).isPresent();
+        return userRepository.findUserByEmail(username).isPresent();
     }
 
     @Override
-    public UserDto toUserDto(User user) {
-        return userMapper.toUserDto(user);
+    public ResponseWrapperUser getUsers() {
+//        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        User user1 = userService.findUserByEmail(user.getEmail()).orElseThrow(() -> new UsernameNotFoundException("lssdlkfj"));
+//        List list = new ArrayList<>();
+//        list.add(user1);
+//        ResponseWrapperUser users = new ResponseWrapperUser(list);
+        Collection<UserDto> userDtoCollection = userRepository.findAll().stream()
+                .map(user -> userMapper.toUserDto(user))
+                .collect(Collectors.toList());
+        return new ResponseWrapperUser(userDtoCollection);
     }
+
+    @Override
+    public UserDto getUserDto(int id) {
+        if (userRepository.findById(id).isPresent()){
+            return userMapper.toUserDto(userRepository.findById(id).get());
+        }
+        return null;
+    }
+
 }
