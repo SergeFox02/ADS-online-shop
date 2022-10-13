@@ -8,8 +8,6 @@ public interface AdsService {
 
     ResponseWrapperAds getAllAds();
 
-    Ads findAdsById(int id);
-
     ResponseWrapperAds getAdsMe();
 
     FullAds getFullAds(int id);
@@ -17,4 +15,6 @@ public interface AdsService {
     AdsDto addAds(CreateAds ads, Image images);
 
     ResponseWrapperAdsComment getAdsComments(int id);
+
+    Ads deleteAds(int id);
 }

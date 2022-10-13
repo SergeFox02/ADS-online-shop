@@ -293,8 +293,11 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> removeAds(@PathVariable Long id){
-        return ResponseEntity.ok("Remove Ads pk = " + id);
+    public ResponseEntity<?> removeAds(@PathVariable Integer id){
+        if (adsService.deleteAds(id) == null){
+            return ResponseEntity.status(404).build();
+        }
+        return ResponseEntity.ok().build();
     }
 
     @Operation(

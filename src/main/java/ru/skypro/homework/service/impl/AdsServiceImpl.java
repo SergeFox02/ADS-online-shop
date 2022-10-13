@@ -44,14 +44,6 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public Ads findAdsById(int id) {
-        if (adsRepository.findById(id).isEmpty()){
-            return null;
-        }
-        return adsRepository.findById(id).get();
-    }
-
-    @Override
     public ResponseWrapperAds getAdsMe() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Collection<AdsDto> adsDtoCollection = adsRepository.findAll().stream()
@@ -94,5 +86,19 @@ public class AdsServiceImpl implements AdsService {
                 .map(commentsMapper::toAdsComment)
                 .collect(Collectors.toList());
         return new ResponseWrapperAdsComment(commentDtoCollection);
+    }
+
+    @Override
+    public Ads deleteAds(int id) {
+        if (adsRepository.findById(id).isEmpty() ){
+            return null;
+        }
+        Ads deleteAds = adsRepository.findById(id).get();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (deleteAds.getAuthor().equals(user)){
+            adsRepository.deleteById(id);
+            return deleteAds;
+        }
+        return null;
     }
 }
