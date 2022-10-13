@@ -41,4 +41,12 @@ public class AdsCommentsImpl implements AdsCommentsService {
         commentRepository.deleteById(id);
         return deleteComment;
     }
+
+    @Override
+    public AdsComment getComment(int ad_pk, int id) {
+        if (adsRepository.findById(ad_pk).isEmpty() || commentRepository.findById(id).isEmpty()){
+            return null;
+        }
+        return commentsMapper.toAdsComment(commentRepository.findById(id).get());
+    }
 }

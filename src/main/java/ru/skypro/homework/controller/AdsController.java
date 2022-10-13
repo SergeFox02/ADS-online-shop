@@ -255,8 +255,11 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @GetMapping("/{ad_pk}/comments/{id}")
-    public ResponseEntity<?> getAdsComment(@PathVariable Long ad_pk, @PathVariable Long id){
-        return ResponseEntity.ok("Get Ads comment pk = " + ad_pk + "; comment pk = " + id);
+    public ResponseEntity<?> getAdsComment(@PathVariable Integer ad_pk, @PathVariable Integer id){
+        if (adsCommentsService.getComment(ad_pk, id) == null){
+            return ResponseEntity.status(404).build();
+        }
+        return ResponseEntity.ok(adsCommentsService.getComment(ad_pk, id));
     }
 
     @Operation(
