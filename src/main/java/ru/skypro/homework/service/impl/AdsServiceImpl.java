@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.model.dto.*;
 import ru.skypro.homework.model.entity.Ads;
 import ru.skypro.homework.model.entity.Image;
+import ru.skypro.homework.model.entity.Role;
 import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.model.mapper.AdsMapper;
 import ru.skypro.homework.model.mapper.CommentsMapper;
@@ -95,7 +96,7 @@ public class AdsServiceImpl implements AdsService {
         }
         Ads deleteAds = adsRepository.findById(id).get();
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (deleteAds.getAuthor().equals(user)){
+        if (deleteAds.getAuthor().equals(user) || user.getRole().equals(Role.ADMIN)){
             adsRepository.deleteById(id);
             return deleteAds;
         }

@@ -5,6 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.model.dto.AdsComment;
 import ru.skypro.homework.model.entity.Comment;
+import ru.skypro.homework.model.entity.Role;
 import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.model.mapper.CommentsMapper;
 import ru.skypro.homework.repository.AdsRepository;
@@ -38,8 +39,12 @@ public class AdsCommentsImpl implements AdsCommentsService {
             return null;
         }
         Comment deleteComment = commentRepository.findById(id).get();
-        commentRepository.deleteById(id);
-        return deleteComment;
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (deleteComment.getAuthor().equals(user) || user.getRole().equals(Role.ADMIN)) {
+            commentRepository.deleteById(id);
+            return deleteComment;
+        }
+        return null;
     }
 
     @Override
