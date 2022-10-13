@@ -1,6 +1,6 @@
 -- liquibase formatted sql
 
--- changeset algmironov:1
+-- changeSet algmironov:1
 
 CREATE TABLE users
 (
@@ -13,7 +13,7 @@ CREATE TABLE users
     role                 varchar(255) NOT NULL DEFAULT 'USER'
 );
 
--- changeset algmironov:2
+-- changeSet algmironov:2
 
 CREATE TABLE ads
 (
@@ -25,7 +25,7 @@ CREATE TABLE ads
     author              bigint NOT NULL references users(id)
 );
 
--- changeset algmironov:3
+-- changeSet algmironov:3
 
 CREATE TABLE comments
 (
@@ -59,4 +59,7 @@ ALTER TABLE ads ALTER COLUMN image_id TYPE bigint USING image_id ::bigint;
 
 -- changeSet Serge:9
 ALTER TABLE ads ADD CONSTRAINT imageIdReferences FOREIGN KEY (image_id) REFERENCES image(id);
+
+-- changeSet Serge:10
+ALTER TABLE comments RENAME COLUMN pk TO id;
 

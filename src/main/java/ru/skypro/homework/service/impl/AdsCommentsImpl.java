@@ -31,4 +31,14 @@ public class AdsCommentsImpl implements AdsCommentsService {
         commentRepository.save(newComment);
         return adsComment;
     }
+
+    @Override
+    public Comment deleteComment(int ad_pk, int id) {
+        if (adsRepository.findById(ad_pk).isEmpty() || commentRepository.findById(id).isEmpty()){
+            return null;
+        }
+        Comment deleteComment = commentRepository.findById(id).get();
+        commentRepository.deleteById(id);
+        return deleteComment;
+    }
 }
