@@ -54,4 +54,24 @@ public class AdsCommentsImpl implements AdsCommentsService {
         }
         return commentsMapper.toAdsComment(commentRepository.findById(id).get());
     }
+
+    @Override
+    public AdsComment updateComment(int ad_pk, int id, AdsComment comment) {
+        if (adsRepository.findById(ad_pk).isEmpty() || commentRepository.findById(id).isEmpty()){
+            return null;
+        }
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Comment oldComment = commentRepository.findById(id).get();
+        if (oldComment.getAuthor().equals(user) || user.getRole().equals(Role.ADMIN)){
+            Comment newComment = commentsMapper.toComment(comment);
+            newComment.setAuthor(user);
+            newComment.setId(comment.getPk());
+            newComment.setText(comment.getText());
+            newComment.setAds(adsRepository.findById(ad_pk).get());
+            newComment.setCreatedAt(LocalDateTime.now());
+            commentRepository.save(newComment);
+            return commentsMapper.toAdsComment(newComment);
+        }
+        return null;
+    }
 }

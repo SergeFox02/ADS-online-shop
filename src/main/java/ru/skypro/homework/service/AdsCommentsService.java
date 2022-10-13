@@ -10,4 +10,6 @@ public interface AdsCommentsService {
     Comment deleteComment(int ad_pk, int id);
 
     AdsComment getComment(int ad_pk, int id);
+
+    AdsComment updateComment(int ad_pk, int id, AdsComment comment);
 }

@@ -277,8 +277,11 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @PatchMapping("/{ad_pk}/comments/{id}")
-    public ResponseEntity<?> updateAdsComment(@PathVariable Long ad_pk, @PathVariable Long id){
-        return ResponseEntity.ok("Update Ads comment pk = " + ad_pk + "; comment pk = " + id);
+    public ResponseEntity<?> updateAdsComment(@PathVariable Integer ad_pk, @PathVariable Integer id, @RequestBody AdsComment comment){
+        if (adsCommentsService.updateComment(ad_pk, id, comment) == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(adsCommentsService.updateComment(ad_pk, id, comment));
     }
 
     @Operation(
