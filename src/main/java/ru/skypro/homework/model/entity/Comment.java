@@ -15,7 +15,7 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pk;
+    private Integer id;
 
     private LocalDateTime createdAt;
 
@@ -35,18 +35,18 @@ public class Comment {
         if (this == o) return true;
         if (!(o instanceof Comment)) return false;
         Comment comment1 = (Comment) o;
-        return getPk().equals(comment1.getPk());
+        return getId().equals(comment1.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPk());
+        return Objects.hash(getId());
     }
 
     @Override
     public String toString() {
         return "Comment{" +
-                "pk=" + pk +
+                "id=" + id +
                 ", createdAt=" + createdAt +
                 ", text='" + text + '\'' +
                 ", ads=" + ads +

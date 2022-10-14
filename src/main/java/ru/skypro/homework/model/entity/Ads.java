@@ -1,7 +1,6 @@
 package ru.skypro.homework.model.entity;
 
 import lombok.*;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -17,23 +16,23 @@ public class Ads {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String title;
 
     private String description;
 
-    @Lob
-    @Type(type = "org.hibernate.type.TextType")
-    private String image;
+    @JoinColumn(name = "image_id")
+    @OneToOne
+    private Image image;
 
-    private Long price;
+    private Integer price;
 
     @Transient
-    @OneToMany(mappedBy = "ads")
+    @OneToMany(mappedBy = "ads", cascade = CascadeType.ALL)
     private Collection<Comment> comments;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author")
     private User author;
 
@@ -53,12 +52,12 @@ public class Ads {
     @Override
     public String toString() {
         return "Ads{" +
-                "pk=" + id +
+                "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
-                ", comments=" + comments +
                 ", author=" + author +
+                ", image=" + image +
                 '}';
     }
 }

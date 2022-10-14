@@ -10,10 +10,10 @@ import ru.skypro.homework.model.dto.RegisterReq;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    @Mapping(source = "username", target = "email")
+    @Mapping(target = "email", source = "username")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "comments", ignore = true)
     User toUser(RegisterReq registerReq);
 
-    User toUser(UserDto userDto);
-
-    User toUser(LoginReq loginReq);
+    UserDto toUserDto(User user);
 }

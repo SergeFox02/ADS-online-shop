@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class FullAds {
 
-    private Long pk;
+    private Integer pk;
     private String authorFirstName;
     private String authorLastName;
     private String description;
