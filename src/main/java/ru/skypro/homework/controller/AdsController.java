@@ -340,8 +340,11 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateAds(@PathVariable Long id){
-        return ResponseEntity.ok("Update Ads pk = " + id);
+    public ResponseEntity<?> updateAds(@PathVariable Integer id, @RequestBody AdsDto ads){
+        if (adsService.updateAds(id, ads) == null){
+            return ResponseEntity.status(404).build();
+        }
+        return ResponseEntity.ok(adsService.updateAds(id, ads));
     }
 
 }

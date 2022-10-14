@@ -17,4 +17,6 @@ public interface AdsService {
     ResponseWrapperAdsComment getAdsComments(int id);
 
     Ads deleteAds(int id);
+
+    AdsDto updateAds(int id, AdsDto ads);
 }

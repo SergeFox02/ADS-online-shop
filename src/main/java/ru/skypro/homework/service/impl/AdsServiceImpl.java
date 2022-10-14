@@ -6,10 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.model.dto.*;
-import ru.skypro.homework.model.entity.Ads;
-import ru.skypro.homework.model.entity.Image;
-import ru.skypro.homework.model.entity.Role;
-import ru.skypro.homework.model.entity.User;
+import ru.skypro.homework.model.entity.*;
 import ru.skypro.homework.model.mapper.AdsMapper;
 import ru.skypro.homework.model.mapper.CommentsMapper;
 import ru.skypro.homework.repository.AdsRepository;
@@ -99,6 +96,27 @@ public class AdsServiceImpl implements AdsService {
         if (deleteAds.getAuthor().equals(user) || user.getRole().equals(Role.ADMIN)){
             adsRepository.deleteById(id);
             return deleteAds;
+        }
+        return null;
+    }
+
+    @Override
+    public AdsDto updateAds(int id, AdsDto ads) {
+        if (adsRepository.findById(id).isEmpty() ){
+            return null;
+        }
+        Ads oldAds = adsRepository.findById(id).get();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (oldAds.getAuthor().equals(user) || user.getRole().equals(Role.ADMIN)){
+            Ads newAds = new Ads();
+            newAds.setAuthor(user);
+            newAds.setId(ads.getPk());
+            newAds.setDescription(ads.getDescription());
+            newAds.setPrice(ads.getPrice());
+            newAds.setTitle(ads.getTitle());
+//            newAds.setImage(); здесь надо написать добавление картинки из adsDto
+            adsRepository.save(newAds);
+            return adsMapper.toAdsDto(newAds);
         }
         return null;
     }
