@@ -50,26 +50,11 @@ public class AdsController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "OK",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseWrapperAds.class)
-                            )
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseWrapperAds.class))
                     ),
-                    @ApiResponse(
-                            responseCode = "401",
-                            description = "Unauthorized",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "403",
-                            description = "Forbidden",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Not Found",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    )
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
             },
             tags = TAG_ADS_CONTROLLER
     )
@@ -77,6 +62,7 @@ public class AdsController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> getAllAds(){
         logger.info("Call getAllAds");
+
         return ResponseEntity.ok(adsService.getAllAds());
     }
 
@@ -86,26 +72,11 @@ public class AdsController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "OK",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseWrapperAds.class)
-                            )
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseWrapperAds.class))
                     ),
-                    @ApiResponse(
-                            responseCode = "401",
-                            description = "Unauthorized",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "403",
-                            description = "Forbidden",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Not Found",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    )
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
             },
             tags = TAG_ADS_CONTROLLER
     )
@@ -116,53 +87,32 @@ public class AdsController {
                                       @RequestParam(required = false) Object details,
                                       @RequestParam(required = false) Object principal) {
         logger.info("Call ads/me");
+
         return ResponseEntity.ok(adsService.getAdsMe());
     }
-
 
     @Operation(
             summary = "addAds",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = CreateAds.class)
-                    )
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = CreateAds.class))
             ),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
                             description = "OK",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseWrapperAds.class)
-                            )
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseWrapperAds.class))
                     ),
-                    @ApiResponse(
-                            responseCode = "201",
-                            description = "Created",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "401",
-                            description = "Unauthorized",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "403",
-                            description = "Forbidden",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Not Found",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    )
+                    @ApiResponse(responseCode = "201", description = "Created"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
             },
             tags = TAG_ADS_CONTROLLER
     )
     @PostMapping
     public ResponseEntity<?> addAds(@Valid @RequestPart("properties") @Parameter(schema = @Schema(type = "string", format = "binary")) CreateAds ads,
-                @RequestPart("image") MultipartFile file) {
+                                    @RequestPart("image") MultipartFile file) {
+        logger.info("Call addAds");
         Image image;
         try{
             image = imageService.addImage(file);
@@ -170,27 +120,7 @@ public class AdsController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        logger.info("call addAds in controller");
         return ResponseEntity.ok(adsService.addAds(ads, image));
-    }
-
-    @Operation(
-            summary = "getAdsComment",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "OK",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseWrapperAdsComment.class)
-                            )
-                    )
-            },
-            tags = TAG_ADS_CONTROLLER
-    )
-    @GetMapping("/{ad_pk}/comments")
-    public ResponseEntity<?> getAdsComments(@PathVariable Integer ad_pk){
-        return ResponseEntity.ok(adsService.getAdsComments(ad_pk));
     }
 
     @Operation(
@@ -205,17 +135,65 @@ public class AdsController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "OK",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = AdsComment.class)
-                            )
-                    )
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = AdsComment.class))
+                    ),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+
             },
             tags = TAG_ADS_CONTROLLER
     )
     @PostMapping("/{ad_pk}/comments")
     public ResponseEntity<?> addAdsComment(@PathVariable Integer ad_pk, @RequestBody AdsComment adsComment){
+        logger.info("Call addAdsComment");
+
         return ResponseEntity.ok(adsCommentsService.addComment(ad_pk, adsComment));
+    }
+
+    @Operation(
+            summary = "updateAdsComment",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = AdsComment.class))
+                    ),
+                    @ApiResponse(responseCode = "204", description = "No Content"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden")
+
+            },
+            tags = TAG_ADS_CONTROLLER
+    )
+    @PatchMapping("/{ad_pk}/comments/{id}")
+    public ResponseEntity<?> updateAdsComment(@PathVariable Integer ad_pk,
+                                              @PathVariable Integer id,
+                                              @RequestBody AdsComment comment){
+        logger.info("Call updateAdsComment");
+
+        return ResponseEntity.ok(adsCommentsService.updateComment(ad_pk, id, comment));
+    }
+
+    @Operation(
+            summary = "getAdsComment",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseWrapperAdsComment.class))
+                    ),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            },
+            tags = TAG_ADS_CONTROLLER
+    )
+    @GetMapping("/{ad_pk}/comments")
+    public ResponseEntity<?> getAdsComments(@PathVariable Integer ad_pk){
+        logger.info("Call getAdsComments");
+
+        return ResponseEntity.ok(adsService.getAdsComments(ad_pk));
     }
 
     @Operation(
@@ -224,19 +202,19 @@ public class AdsController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "OK",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseWrapperAdsComment.class)
-                            )
-                    )
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseWrapperAdsComment.class))
+                    ),
+                    @ApiResponse(responseCode = "204", description = "No Content"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden")
             },
             tags = TAG_ADS_CONTROLLER
     )
     @DeleteMapping("/{ad_pk}/comments/{id}")
     public ResponseEntity<?> deleteAdsComment(@PathVariable Integer ad_pk, @PathVariable Integer id){
-        if (adsCommentsService.deleteComment(ad_pk, id) == null){
-            return ResponseEntity.status(404).build();
-        }
+        logger.info("Call deleteAdsComment");
+        adsCommentsService.deleteComment(ad_pk, id);
+
         return ResponseEntity.ok().build();
     }
 
@@ -246,42 +224,19 @@ public class AdsController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "OK",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = AdsComment.class)
-                            )
-                    )
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = AdsComment.class))
+                    ),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
             },
             tags = TAG_ADS_CONTROLLER
     )
     @GetMapping("/{ad_pk}/comments/{id}")
-    public ResponseEntity<?> getAdsComment(@PathVariable Integer ad_pk, @PathVariable Integer id){
-        if (adsCommentsService.getComment(ad_pk, id) == null){
-            return ResponseEntity.status(404).build();
-        }
-        return ResponseEntity.ok(adsCommentsService.getComment(ad_pk, id));
-    }
+    public ResponseEntity<?> getAdsComment(@PathVariable Integer ad_pk, @PathVariable Integer id) {
+        logger.info("Call getAdsComment");
 
-    @Operation(
-            summary = "updateAdsComment",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "OK",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = AdsComment.class)
-                            )
-                    )
-            },
-            tags = TAG_ADS_CONTROLLER
-    )
-    @PatchMapping("/{ad_pk}/comments/{id}")
-    public ResponseEntity<?> updateAdsComment(@PathVariable Integer ad_pk, @PathVariable Integer id, @RequestBody AdsComment comment){
-        if (adsCommentsService.updateComment(ad_pk, id, comment) == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(adsCommentsService.updateComment(ad_pk, id, comment));
+        return ResponseEntity.ok(adsCommentsService.getComment(ad_pk, id));
     }
 
     @Operation(
@@ -291,15 +246,18 @@ public class AdsController {
                             responseCode = "200",
                             description = "OK",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)
-                    )
+                    ),
+                    @ApiResponse(responseCode = "204", description = "No Content"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden")
             },
             tags = TAG_ADS_CONTROLLER
     )
     @DeleteMapping("/{id}")
     public ResponseEntity<?> removeAds(@PathVariable Integer id){
-        if (adsService.deleteAds(id) == null){
-            return ResponseEntity.status(404).build();
-        }
+        logger.info("Call removeAds");
+        adsService.deleteAds(id);
+
         return ResponseEntity.ok().build();
     }
 
@@ -309,19 +267,18 @@ public class AdsController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "OK",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = FullAds.class)
-                            )
-                    )
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = FullAds.class))
+                    ),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
             },
             tags = TAG_ADS_CONTROLLER
     )
     @GetMapping("/{id}")
     public ResponseEntity<?> getAds(@PathVariable Integer id){
-        if (adsService.getFullAds(id) == null){
-            return ResponseEntity.status(404).build();
-        }
+        logger.info("Call getAds");
+
         return ResponseEntity.ok(adsService.getFullAds(id));
     }
 
@@ -335,15 +292,17 @@ public class AdsController {
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = Ads.class)
                             )
-                    )
+                    ),
+                    @ApiResponse(responseCode = "204", description = "No Content"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden")
             },
             tags = TAG_ADS_CONTROLLER
     )
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateAds(@PathVariable Integer id, @RequestBody AdsDto ads){
-        if (adsService.updateAds(id, ads) == null){
-            return ResponseEntity.status(404).build();
-        }
+        logger.info("Call updateAds");
+
         return ResponseEntity.ok(adsService.updateAds(id, ads));
     }
 

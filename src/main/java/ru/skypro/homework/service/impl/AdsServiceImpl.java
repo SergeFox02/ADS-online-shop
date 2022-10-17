@@ -3,8 +3,10 @@ package ru.skypro.homework.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.model.dto.*;
 import ru.skypro.homework.model.entity.*;
 import ru.skypro.homework.model.mapper.AdsMapper;
@@ -35,14 +37,17 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public ResponseWrapperAds getAllAds() {
+        logger.info("Call getAllAds");
         Collection<AdsDto> adsDtoCollection = adsRepository.findAll().stream()
-                .map(ads -> adsMapper.toAdsDto(ads))
+                .map(adsMapper::toAdsDto)
                 .collect(Collectors.toList());
+
         return new ResponseWrapperAds(adsDtoCollection);
     }
 
     @Override
     public ResponseWrapperAds getAdsMe() {
+        logger.info("Call getAdsMe");
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Collection<AdsDto> adsDtoCollection = adsRepository.findAll().stream()
                 .filter(ads -> Objects.equals(ads.getAuthor().getId(), user.getId()))
@@ -54,11 +59,12 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public FullAds getFullAds(int id) {
+        logger.info("Call getFullAds");
         if (adsRepository.findById(id).isEmpty()){
-            return null;
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         }
         Ads getAds = adsRepository.findById(id).get();
-        logger.info("Call get ads and fullAdsMap");
+
         return adsMapper.toFullAds(getAds, userRepository.findById(getAds.getAuthor().getId()).get());
     }
 
