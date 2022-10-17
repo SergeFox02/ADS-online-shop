@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,21 +29,15 @@ import java.io.IOException;
         allowedHeaders = "*",
         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/ads")
 public class AdsController {
 
     private final String TAG_ADS_CONTROLLER = "Объявления";
     Logger logger = LoggerFactory.getLogger(AdsController.class);
-
     private final AdsService adsService;
     private final ImageService imageService;
     private final AdsCommentsService adsCommentsService;
-
-    public AdsController(AdsService adsService, ImageService imageService, AdsCommentsService adsCommentsService) {
-        this.adsService = adsService;
-        this.imageService = imageService;
-        this.adsCommentsService = adsCommentsService;
-    }
 
     @Operation(
             summary = "getAllAds",
@@ -59,7 +54,6 @@ public class AdsController {
             tags = TAG_ADS_CONTROLLER
     )
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> getAllAds(){
         logger.info("Call getAllAds");
 

@@ -50,13 +50,12 @@ public class WebSecurityConfig {
         return http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .csrf().disable()
-                .cors().and()
                 .userDetailsService(userService)
-                .httpBasic(withDefaults())
                 .authorizeHttpRequests((authz) -> authz
                         .mvcMatchers(AUTH_WHITELIST).permitAll()
                         .mvcMatchers("/users/**", "ads/**").authenticated()
                 )
+                .cors().and()
                 .httpBasic(withDefaults())
                 .build();
     }
