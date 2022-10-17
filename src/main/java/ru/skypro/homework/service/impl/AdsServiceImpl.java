@@ -61,7 +61,7 @@ public class AdsServiceImpl implements AdsService {
     public FullAds getFullAds(int id) {
         logger.info("Call getFullAds");
         if (adsRepository.findById(id).isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         Ads getAds = adsRepository.findById(id).get();
 
@@ -70,46 +70,48 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public AdsDto addAds(CreateAds ads, Image image) {
-        logger.info("Trying to add new ads");
+        logger.info("Call addAds");
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Ads newAds = adsMapper.newAds(ads, user, image);
-        logger.info("set newAds {}", newAds);
-        Ads response = adsRepository.save(newAds);
-        logger.info("The ad with pk = {} was saved ", response.getId());
+        Ads response = adsRepository.save(adsMapper.newAds(ads, user, image));
 
         return adsMapper.toAdsDto(response);
     }
 
     @Override
     public ResponseWrapperAdsComment getAdsComments(int adsId) {
+        logger.info("Call getAdsComments");
         if (adsRepository.findById(adsId).isEmpty()){
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ads is not Found");
         }
         Collection<AdsComment> commentDtoCollection = commentRepository.findAll().stream()
                 .filter(c -> c.getAds().getId() == adsId)
                 .map(commentsMapper::toAdsComment)
                 .collect(Collectors.toList());
+
         return new ResponseWrapperAdsComment(commentDtoCollection);
     }
 
     @Override
     public Ads deleteAds(int id) {
-        if (adsRepository.findById(id).isEmpty() ){
-            return null;
+        logger.info("Call deleteAds");
+        if (adsRepository.findById(id).isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ads is not Found");
         }
         Ads deleteAds = adsRepository.findById(id).get();
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (deleteAds.getAuthor().equals(user) || user.getRole().equals(Role.ADMIN)){
             adsRepository.deleteById(id);
+
             return deleteAds;
         }
-        return null;
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unavailable to update. It's not your ads!");
     }
 
     @Override
     public AdsDto updateAds(int id, AdsDto ads) {
-        if (adsRepository.findById(id).isEmpty() ){
-            return null;
+        logger.info("Call updateAds");
+        if (adsRepository.findById(id).isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ads is not Found");
         }
         Ads oldAds = adsRepository.findById(id).get();
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -120,10 +122,10 @@ public class AdsServiceImpl implements AdsService {
             newAds.setDescription(ads.getDescription());
             newAds.setPrice(ads.getPrice());
             newAds.setTitle(ads.getTitle());
-//            newAds.setImage(); здесь надо написать добавление картинки из adsDto
             adsRepository.save(newAds);
+
             return adsMapper.toAdsDto(newAds);
         }
-        return null;
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unavailable to update. It's not your ads!");
     }
 }
