@@ -24,10 +24,10 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 @CrossOrigin(
-        value = "http://localhost:3000",
-        allowCredentials = "true",
-        allowedHeaders = "*",
-        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+        value = "http://localhost:3000")
+//        allowCredentials = "true",
+//        allowedHeaders = "*",
+//        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/ads")
