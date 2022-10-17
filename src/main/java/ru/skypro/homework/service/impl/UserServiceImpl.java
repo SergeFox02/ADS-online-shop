@@ -71,13 +71,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseWrapperUser getUsers() {
-//        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        User user1 = userService.findUserByEmail(user.getEmail()).orElseThrow(() -> new UsernameNotFoundException("lssdlkfj"));
-//        List list = new ArrayList<>();
-//        list.add(user1);
-//        ResponseWrapperUser users = new ResponseWrapperUser(list);
         Collection<UserDto> userDtoCollection = userRepository.findAll().stream()
-                .map(user -> userMapper.toUserDto(user))
+                .map(userMapper::toUserDto)
                 .collect(Collectors.toList());
         return new ResponseWrapperUser(userDtoCollection);
     }
