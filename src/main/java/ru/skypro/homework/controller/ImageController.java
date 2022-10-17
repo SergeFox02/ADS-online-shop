@@ -25,28 +25,28 @@ import java.io.*;
 public class ImageController {
 
     Logger logger = LoggerFactory.getLogger(ImageController.class);
-
     private final ImageService imageService;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getImage(@PathVariable Integer id){
-        logger.info("Call method getImage");
+        logger.info("Call getImage id = " + id);
         Image image = imageService.findImage(id);
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(image.getMediaType()));
         headers.setContentLength(image.getData().length);
+
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(image.getData());
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addImage(@RequestParam MultipartFile image) throws IOException {
-        logger.info("Call method addImage");
+        logger.info("Call addImage");
         if (image.getSize() > 1024 * 600) {
             logger.warn("Warning: image is to big");
             return ResponseEntity.badRequest().body("File is to big");
         }
         imageService.addImage(image);
+
         return ResponseEntity.ok().build();
     }
 }
