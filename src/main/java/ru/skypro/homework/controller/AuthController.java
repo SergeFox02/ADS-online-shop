@@ -30,7 +30,6 @@ import static ru.skypro.homework.model.entity.Role.USER;
 public class AuthController {
 
     private final String TAG_AUTH_CONTROLLER = "Авторизация";
-
     Logger logger = LoggerFactory.getLogger(AuthController.class);
     private final AuthService authService;
 
@@ -50,26 +49,10 @@ public class AuthController {
                             description = "OK",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)
                     ),
-                    @ApiResponse(
-                            responseCode = "201",
-                            description = "Created",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "401",
-                            description = "Unauthorized",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "403",
-                            description = "Forbidden",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Not Found",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    )
+                    @ApiResponse(responseCode = "201", description = "Created"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
             },
             tags = TAG_AUTH_CONTROLLER
     )
@@ -78,8 +61,10 @@ public class AuthController {
         logger.info("Call login");
         if (authService.login(req.getUsername(), req.getPassword())) {
             logger.info("user is login");
+
             return ResponseEntity.ok().build();
         } else {
+
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
@@ -94,31 +79,11 @@ public class AuthController {
                     )
             ),
             responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "OK",
-                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "201",
-                            description = "Created",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "401",
-                            description = "Unauthorized",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "403",
-                            description = "Forbidden",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Not Found",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    )
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "201", description = "Created"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
             },
             tags = TAG_AUTH_CONTROLLER
     )
@@ -126,8 +91,10 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody RegisterReq req) {
         Role role = req.getRole() == null ? USER : req.getRole();
         if (authService.register(req, role)) {
+
             return ResponseEntity.ok().build();
         } else {
+
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }

@@ -29,16 +29,19 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean login(String userName, String password) {
+        logger.info("Call login");
         if (!userService.isPresent(userName)) {
             return false;
         }
         UserDetails userDetails = userService.loadUserByUsername(userName);
         String encryptedPassword = userDetails.getPassword();
+
         return encoder.matches(password, encryptedPassword);
     }
 
     @Override
     public boolean register(RegisterReq registerReq, Role role) {
+        logger.info("Call register");
         if (manager.userExists(registerReq.getUsername())) {
             logger.info("Not register new user? because user exist");
             return false;
@@ -49,6 +52,7 @@ public class AuthServiceImpl implements AuthService {
         newUser.setPassword(encoder.encode(registerReq.getPassword()));
         manager.createUser(newUser);
         userRepository.save(newUser);
+
         return true;
     }
 }

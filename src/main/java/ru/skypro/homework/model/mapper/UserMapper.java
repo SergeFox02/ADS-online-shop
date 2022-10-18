@@ -4,7 +4,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.skypro.homework.model.dto.UserDto;
 import ru.skypro.homework.model.entity.User;
-import ru.skypro.homework.model.dto.LoginReq;
 import ru.skypro.homework.model.dto.RegisterReq;
 
 @Mapper(componentModel = "spring")

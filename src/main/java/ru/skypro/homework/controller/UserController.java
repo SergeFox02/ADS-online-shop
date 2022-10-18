@@ -13,7 +13,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.model.dto.NewPassword;
-import ru.skypro.homework.model.dto.UserDto;
 import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.model.mapper.UserMapper;
 import ru.skypro.homework.service.impl.UserServiceImpl;
@@ -35,26 +34,11 @@ public class UserController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "OK",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = User.class)
-                            )
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = User.class))
                     ),
-                    @ApiResponse(
-                            responseCode = "204",
-                            description = "No content",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "403",
-                            description = "Forbidden",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Not Found",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    )
+                    @ApiResponse(responseCode = "204", description = "No content"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
             },
             tags = TAG_USER_CONTROLLER
     )
@@ -62,6 +46,7 @@ public class UserController {
     public ResponseEntity<?> getUsers(){
         logger.info("getUsers in users/me");
         User result = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         return ResponseEntity.ok(userMapper.toUserDto(result));
     }
 
@@ -69,35 +54,17 @@ public class UserController {
             summary = "addUser",
             description = "user",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = User.class)
-                    )
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = User.class))
             ),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
                             description = "OK",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = User.class)
-                            )
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = User.class))
                     ),
-                    @ApiResponse(
-                            responseCode = "204",
-                            description = "No Content",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "401",
-                            description = "Unauthorized",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "403",
-                            description = "Forbidden",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    )
+                    @ApiResponse(responseCode = "204", description = "No Content"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden")
             },
             tags = TAG_USER_CONTROLLER
     )
@@ -105,6 +72,7 @@ public class UserController {
     public ResponseEntity<?> addUser(){
         SecurityContext context = SecurityContextHolder.getContext();
         System.out.println(context);
+
         return ResponseEntity.ok("Add users");
     }
 
@@ -126,26 +94,15 @@ public class UserController {
                                     schema = @Schema(implementation = User.class)
                             )
                     ),
-                    @ApiResponse(
-                            responseCode = "204",
-                            description = "No Content",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "401",
-                            description = "Unauthorized",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "403",
-                            description = "Forbidden",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    )
+                    @ApiResponse(responseCode = "204", description = "No Content"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden")
             },
             tags = TAG_USER_CONTROLLER
     )
     @PatchMapping("/me")
     public ResponseEntity<?> updateUser(){
+
         return ResponseEntity.ok("Update user");
     }
 
@@ -167,31 +124,16 @@ public class UserController {
                                     schema = @Schema(implementation = NewPassword.class)
                             )
                     ),
-                    @ApiResponse(
-                            responseCode = "201",
-                            description = "Created",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "401",
-                            description = "Unauthorized",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "403",
-                            description = "Forbidden",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Not Found",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    )
+                    @ApiResponse(responseCode = "201", description = "Created"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
             },
             tags = TAG_USER_CONTROLLER
     )
     @PostMapping("/set_password")
     public ResponseEntity<?> setPassword(){
+
         return ResponseEntity.ok("Set password of user");
     }
 
@@ -206,27 +148,16 @@ public class UserController {
                                     schema = @Schema(implementation = User.class)
                             )
                     ),
-                    @ApiResponse(
-                            responseCode = "401",
-                            description = "Unauthorized",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "403",
-                            description = "Forbidden",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Not Found",
-                            content = @Content(mediaType = MediaType.TEXT_PLAIN_VALUE)
-                    )
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
             },
             tags = TAG_USER_CONTROLLER
     )
     @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable Integer id){
         logger.info("Get users with id = " + id);
+
         return ResponseEntity.ok(userService.getUserDto(id));
     }
 }
