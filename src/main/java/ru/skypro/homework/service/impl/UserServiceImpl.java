@@ -1,6 +1,8 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final UserMapper userMapper;
@@ -83,6 +86,13 @@ public class UserServiceImpl implements UserService {
             return userMapper.toUserDto(userRepository.findById(id).get());
         }
         return null;
+    }
+
+    @Override
+    public CreateUser addUser(CreateUser user) {
+        logger.info("Call addUser");
+        User response = userRepository.save(userMapper.toUser(user));
+        return userMapper.toCreateUser(response);
     }
 
 }

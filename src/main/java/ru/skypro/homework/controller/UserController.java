@@ -9,9 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.model.dto.CreateUser;
 import ru.skypro.homework.model.dto.NewPassword;
 import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.model.mapper.UserMapper;
@@ -54,13 +55,13 @@ public class UserController {
             summary = "addUser",
             description = "user",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = User.class))
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = CreateUser.class))
             ),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
                             description = "OK",
-                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = User.class))
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = CreateUser.class))
                     ),
                     @ApiResponse(responseCode = "204", description = "No Content"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
@@ -68,12 +69,11 @@ public class UserController {
             },
             tags = TAG_USER_CONTROLLER
     )
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<?> addUser(){
-        SecurityContext context = SecurityContextHolder.getContext();
-        System.out.println(context);
+    public ResponseEntity<?> addUser(@RequestBody CreateUser user){
 
-        return ResponseEntity.ok("Add users");
+        return ResponseEntity.ok(userService.addUser(user));
     }
 
     @Operation(
