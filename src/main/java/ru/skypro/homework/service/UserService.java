@@ -32,4 +32,6 @@ public interface UserService extends UserDetailsService {
 
     CreateUser addUser(CreateUser user);
 
+    UserDto updateUser(UserDto user);
+
 }

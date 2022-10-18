@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.model.dto.CreateUser;
 import ru.skypro.homework.model.dto.NewPassword;
+import ru.skypro.homework.model.dto.UserDto;
 import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.model.mapper.UserMapper;
 import ru.skypro.homework.service.impl.UserServiceImpl;
@@ -101,9 +102,9 @@ public class UserController {
             tags = TAG_USER_CONTROLLER
     )
     @PatchMapping("/me")
-    public ResponseEntity<?> updateUser(){
+    public ResponseEntity<?> updateUser(@RequestBody UserDto user){
 
-        return ResponseEntity.ok("Update user");
+        return ResponseEntity.ok(userService.updateUser(user));
     }
 
     @Operation(
