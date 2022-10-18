@@ -4,6 +4,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import ru.skypro.homework.model.dto.CreateUser;
+import ru.skypro.homework.model.dto.NewPassword;
 import ru.skypro.homework.model.dto.ResponseWrapperUser;
 import ru.skypro.homework.model.dto.UserDto;
 import ru.skypro.homework.model.entity.User;
@@ -33,5 +34,7 @@ public interface UserService extends UserDetailsService {
     CreateUser addUser(CreateUser user);
 
     UserDto updateUser(UserDto user);
+
+    NewPassword setPassword(NewPassword newPassword);
 
 }

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -117,6 +118,23 @@ public class UserServiceImpl implements UserService {
         }
 
         throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    }
+
+    @Override
+    public NewPassword setPassword(NewPassword newPassword) {
+        logger.info("Call update setPassword");
+        User userAuthorized = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userRepository.findById(userAuthorized.getId()).isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (!passwordEncoder.matches(newPassword.getCurrentPassword(), userAuthorized.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+        String newPass = passwordEncoder.encode(newPassword.getNewPassword());
+        userAuthorized.setPassword(newPass);
+        userRepository.save(userAuthorized);
+        return newPassword;
     }
 
 }

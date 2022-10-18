@@ -133,9 +133,9 @@ public class UserController {
             tags = TAG_USER_CONTROLLER
     )
     @PostMapping("/set_password")
-    public ResponseEntity<?> setPassword(){
+    public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword){
 
-        return ResponseEntity.ok("Set password of user");
+        return ResponseEntity.ok(userService.setPassword(newPassword));
     }
 
     @Operation(
