@@ -15,6 +15,9 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UserService;
 
+/**
+ * Service for working wits Authentication
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -27,6 +30,12 @@ public class AuthServiceImpl implements AuthService {
     private final UserService userService;
     private final UserMapper userMapper;
 
+    /**
+     * User verification
+     * @param userName login of user
+     * @param password user password
+     * @return verification of user
+     */
     @Override
     public boolean login(String userName, String password) {
         logger.info("Call login");
@@ -39,6 +48,13 @@ public class AuthServiceImpl implements AuthService {
         return encoder.matches(password, encryptedPassword);
     }
 
+    /**
+     * Register new user
+     *
+     * @param registerReq data of new user
+     * @param role of new user
+     * @return register new user or no
+     */
     @Override
     public boolean register(RegisterReq registerReq, Role role) {
         logger.info("Call register");

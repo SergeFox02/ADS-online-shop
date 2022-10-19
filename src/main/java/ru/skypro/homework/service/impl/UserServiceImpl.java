@@ -22,6 +22,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Service for working with Users
+ */
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -76,6 +80,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findUserByEmail(username).isPresent();
     }
 
+    /**
+     * Get all users
+     *
+     * @return all users
+     */
     @Override
     public ResponseWrapperUser getUsers() {
         Collection<UserDto> userDtoCollection = userRepository.findAll().stream()
@@ -84,14 +93,27 @@ public class UserServiceImpl implements UserService {
         return new ResponseWrapperUser(userDtoCollection);
     }
 
+    /**
+     * Get userDto by id
+     *
+     * @param id of user
+     * @return userDto
+     * @throws ResponseStatusException {@code HttpStatus.NOT_FOUND} if ads not found
+     */
     @Override
     public UserDto getUserDto(int id) {
         if (userRepository.findById(id).isPresent()){
             return userMapper.toUserDto(userRepository.findById(id).get());
         }
-        return null;
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Add new user
+     *
+     * @param user new user
+     * @return adding user
+     */
     @Override
     public CreateUser addUser(CreateUser user) {
         logger.info("Call addUser");
@@ -99,6 +121,12 @@ public class UserServiceImpl implements UserService {
         return userMapper.toCreateUser(response);
     }
 
+    /**
+     * Update user
+     *
+     * @param userDto new date obout user
+     * @return updating user
+     */
     @Override
     public UserDto updateUser(UserDto userDto) {
         logger.info("Call update user");
@@ -112,6 +140,14 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserDto(response);
     }
 
+    /**
+     * Set new password oj user
+     *
+     * @param newPassword new password
+     * @return new password
+     * @throws ResponseStatusException {@code HttpStatus.NOT_FOUND} if ads or comment not found
+     * @throws ResponseStatusException return {@code  HttpStatus.FORBIDDEN} if user is not Admin or not enough rights odf user
+     */
     @Override
     public NewPassword setPassword(NewPassword newPassword) {
         logger.info("Call update setPassword");
