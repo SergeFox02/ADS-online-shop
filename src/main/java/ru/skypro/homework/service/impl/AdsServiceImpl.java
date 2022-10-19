@@ -32,9 +32,13 @@ public class AdsServiceImpl implements AdsService {
     private final CommentRepository commentRepository;
     private final AdsMapper adsMapper;
     private final CommentsMapper commentsMapper;
-
     Logger logger = LoggerFactory.getLogger(AdsServiceImpl.class);
 
+    /**
+     * Get all ads
+     *
+     * @return all ads
+     */
     @Override
     public ResponseWrapperAds getAllAds() {
         logger.info("Call getAllAds");
@@ -45,6 +49,11 @@ public class AdsServiceImpl implements AdsService {
         return new ResponseWrapperAds(adsDtoCollection);
     }
 
+    /**
+     * Get all ads of user
+     *
+     * @return all ads of user
+     */
     @Override
     public ResponseWrapperAds getAdsMe() {
         logger.info("Call getAdsMe");
@@ -57,6 +66,12 @@ public class AdsServiceImpl implements AdsService {
         return new ResponseWrapperAds(adsDtoCollection);
     }
 
+    /**
+     * Get full information of ads
+     *
+     * @param id ads id
+     * @return full ads
+     */
     @Override
     public FullAds getFullAds(int id) {
         logger.info("Call getFullAds");
@@ -68,6 +83,13 @@ public class AdsServiceImpl implements AdsService {
         return adsMapper.toFullAds(getAds, userRepository.findById(getAds.getAuthor().getId()).get());
     }
 
+    /**
+     * Add new ads
+     *
+     * @param ads new ads
+     * @param image image of ads
+     * @return new ads
+     */
     @Override
     public AdsDto addAds(CreateAds ads, Image image) {
         logger.info("Call addAds");
@@ -77,6 +99,12 @@ public class AdsServiceImpl implements AdsService {
         return adsMapper.toAdsDto(response);
     }
 
+    /**
+     * Get comments of ads
+     *
+     * @param adsId das id
+     * @return comments of ads
+     */
     @Override
     public ResponseWrapperAdsComment getAdsComments(int adsId) {
         logger.info("Call getAdsComments");
@@ -91,6 +119,14 @@ public class AdsServiceImpl implements AdsService {
         return new ResponseWrapperAdsComment(commentDtoCollection);
     }
 
+    /**
+     * Delete ads bu id
+     *
+     * @param id ads id
+     * @return delete ads
+     * @throws ResponseStatusException {@code HttpStatus.NOT_FOUND} if ads not found
+     * @throws ResponseStatusException return {@code  HttpStatus.FORBIDDEN} if user is not Admin or not enough rights odf user
+     */
     @Override
     public Ads deleteAds(int id) {
         logger.info("Call deleteAds");
@@ -107,6 +143,15 @@ public class AdsServiceImpl implements AdsService {
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unavailable to update. It's not your ads!");
     }
 
+    /**
+     * Update ads
+     *
+     * @param id ads id
+     * @param ads new ads
+     * @return updating ads
+     * @throws ResponseStatusException {@code HttpStatus.NOT_FOUND} if ads not found
+     * @throws ResponseStatusException return {@code  HttpStatus.FORBIDDEN} if user is not Admin or not enough rights odf user
+     */
     @Override
     public AdsDto updateAds(int id, AdsDto ads) {
         logger.info("Call updateAds");
