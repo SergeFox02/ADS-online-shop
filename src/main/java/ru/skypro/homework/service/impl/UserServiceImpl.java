@@ -1,10 +1,16 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.model.dto.*;
 import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.model.mapper.UserMapper;
@@ -20,6 +26,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final UserMapper userMapper;
@@ -83,6 +90,43 @@ public class UserServiceImpl implements UserService {
             return userMapper.toUserDto(userRepository.findById(id).get());
         }
         return null;
+    }
+
+    @Override
+    public CreateUser addUser(CreateUser user) {
+        logger.info("Call addUser");
+        User response = userRepository.save(userMapper.toUser(user));
+        return userMapper.toCreateUser(response);
+    }
+
+    @Override
+    public UserDto updateUser(UserDto userDto) {
+        logger.info("Call update user");
+        User updateUser = userMapper.toUser(userDto);
+        User response = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (updateUser.getFirstName() != null) response.setFirstName(updateUser.getFirstName());
+        if (updateUser.getLastName() != null) response.setLastName(updateUser.getLastName());
+        if (updateUser.getPhone() != null) response.setPhone(updateUser.getPhone());
+        userRepository.save(response);
+
+        return userMapper.toUserDto(response);
+    }
+
+    @Override
+    public NewPassword setPassword(NewPassword newPassword) {
+        logger.info("Call update setPassword");
+        User userAuthorized = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userRepository.findById(userAuthorized.getId()).isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (!passwordEncoder.matches(newPassword.getCurrentPassword(), userAuthorized.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+        String newPass = passwordEncoder.encode(newPassword.getNewPassword());
+        userAuthorized.setPassword(newPass);
+        userRepository.save(userAuthorized);
+        return newPassword;
     }
 
 }
