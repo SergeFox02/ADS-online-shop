@@ -103,6 +103,7 @@ public class UserController {
     )
     @PatchMapping("/me")
     public ResponseEntity<?> updateUser(@RequestBody UserDto user){
+        logger.info("Call updateUser");
 
         return ResponseEntity.ok(userService.updateUser(user));
     }
@@ -134,6 +135,7 @@ public class UserController {
     )
     @PostMapping("/set_password")
     public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword){
+        logger.info("Call sePassword");
 
         return ResponseEntity.ok(userService.setPassword(newPassword));
     }
