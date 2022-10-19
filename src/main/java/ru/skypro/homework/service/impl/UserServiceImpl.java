@@ -12,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.model.dto.*;
-import ru.skypro.homework.model.entity.Role;
 import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.model.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
@@ -101,23 +100,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUser(UserDto user) {
+    public UserDto updateUser(UserDto userDto) {
         logger.info("Call update user");
-        User updateUser = userMapper.toUser(user);
-        if (userRepository.findById(user.getId()).isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        User userAuthorized = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (updateUser.equals(userAuthorized) || userAuthorized.getRole().equals(Role.ADMIN)){
-            if (user.getEmail() != null)    updateUser.setEmail(    user.getEmail());
-            if (user.getLastName() != null) updateUser.setLastName( user.getLastName());
-            if (user.getPhone() != null)    updateUser.setPhone(    user.getPhone());
-            userRepository.save(updateUser);
+        User updateUser = userMapper.toUser(userDto);
+        User response = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (updateUser.getFirstName() != null) response.setFirstName(updateUser.getFirstName());
+        if (updateUser.getLastName() != null) response.setLastName(updateUser.getLastName());
+        if (updateUser.getPhone() != null) response.setPhone(updateUser.getPhone());
+        userRepository.save(response);
 
-            return userMapper.toUserDto(updateUser);
-        }
-
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        return userMapper.toUserDto(response);
     }
 
     @Override

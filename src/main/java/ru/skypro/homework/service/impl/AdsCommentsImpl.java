@@ -36,6 +36,7 @@ public class AdsCommentsImpl implements AdsCommentsService {
         newComment.setAds(adsRepository.findById(ad_pk).get());
         newComment.setCreatedAt(LocalDateTime.now());
         commentRepository.save(newComment);
+        adsComment.setPk(newComment.getId());
 
         return adsComment;
     }

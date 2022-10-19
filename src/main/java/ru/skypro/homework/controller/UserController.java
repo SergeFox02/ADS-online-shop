@@ -103,7 +103,7 @@ public class UserController {
     )
     @PatchMapping("/me")
     public ResponseEntity<?> updateUser(@RequestBody UserDto user){
-        logger.info("Call updateUser");
+        logger.info("Call update User");
 
         return ResponseEntity.ok(userService.updateUser(user));
     }
