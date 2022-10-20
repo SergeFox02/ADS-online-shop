@@ -1,7 +1,6 @@
-package ru.skypro.homework.Model;
+package ru.skypro.homework.model.entity;
 
 import lombok.*;
-import org.springframework.context.annotation.EnableMBeanExport;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,7 +15,7 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pk;
+    private Integer id;
 
     private LocalDateTime createdAt;
 
@@ -36,18 +35,18 @@ public class Comment {
         if (this == o) return true;
         if (!(o instanceof Comment)) return false;
         Comment comment1 = (Comment) o;
-        return getPk().equals(comment1.getPk()) && getCreatedAt().equals(comment1.getCreatedAt()) && getText().equals(comment1.getText()) && Objects.equals(getAds(), comment1.getAds()) && getAuthor().equals(comment1.getAuthor());
+        return getId().equals(comment1.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPk(), getCreatedAt(), getText(), getAds(), getAuthor());
+        return Objects.hash(getId());
     }
 
     @Override
     public String toString() {
         return "Comment{" +
-                "pk=" + pk +
+                "id=" + id +
                 ", createdAt=" + createdAt +
                 ", text='" + text + '\'' +
                 ", ads=" + ads +

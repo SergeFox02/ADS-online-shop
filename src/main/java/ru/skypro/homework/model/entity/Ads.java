@@ -1,7 +1,6 @@
-package ru.skypro.homework.Model;
+package ru.skypro.homework.model.entity;
 
 import lombok.*;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -17,23 +16,23 @@ public class Ads {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pk;
+    private Integer id;
 
     private String title;
 
     private String description;
 
-    @Lob
-    @Type(type = "org.hibernate.type.TextType")
-    private String image;
+    @JoinColumn(name = "image_id")
+    @OneToOne
+    private Image image;
 
-    private Float price;
+    private Integer price;
 
     @Transient
-    @OneToMany(mappedBy = "ads")
+    @OneToMany(mappedBy = "ads", cascade = CascadeType.ALL)
     private Collection<Comment> comments;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author")
     private User author;
 
@@ -42,24 +41,23 @@ public class Ads {
         if (this == o) return true;
         if (!(o instanceof Ads)) return false;
         Ads ads = (Ads) o;
-        return getPk().equals(ads.getPk()) && getTitle().equals(ads.getTitle()) && getDescription().equals(ads.getDescription()) && Objects.equals(getImage(), ads.getImage()) && Objects.equals(getPrice(), ads.getPrice());
+        return getId().equals(ads.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPk(), getTitle(), getDescription(), getImage(), getPrice());
+        return Objects.hash(getId());
     }
 
     @Override
     public String toString() {
         return "Ads{" +
-                "pk=" + pk +
+                "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", image='" + image + '\'' +
                 ", price=" + price +
-                ", comments=" + comments +
                 ", author=" + author +
+                ", image=" + image +
                 '}';
     }
 }
