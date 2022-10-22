@@ -2,6 +2,7 @@ package ru.skypro.homework.model.dto;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Data
@@ -14,4 +15,5 @@ public class ResponseWrapperAds {
         this.count = result.size();
         this.results = result;
     }
+
 }
