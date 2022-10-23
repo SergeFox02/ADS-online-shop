@@ -8,11 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.entity.Image;
 import ru.skypro.homework.service.ImageService;
-
-import java.io.*;
 
 @RestController
 @CrossOrigin(
@@ -38,15 +35,4 @@ public class ImageController {
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(image.getData());
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addImage(@RequestParam MultipartFile image) throws IOException {
-        logger.info("Call addImage");
-        if (image.getSize() > 1024 * 600) {
-            logger.warn("Warning: image is to big");
-            return ResponseEntity.badRequest().body("File is to big");
-        }
-        imageService.addImage(image);
-
-        return ResponseEntity.ok().build();
-    }
 }
