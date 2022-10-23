@@ -1,17 +1,16 @@
 package ru.skypro.homework.сontroller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONObject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 import ru.skypro.homework.controller.AdsController;
 import ru.skypro.homework.model.dto.AdsDto;
 import ru.skypro.homework.model.dto.CreateAds;
@@ -26,21 +25,13 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = AdsController.class)
-//@WithMockUser //(username = "user@gmail.com", password = "password")
-@AutoConfigureMockMvc(addFilters = false)
-
 public class AdsControllerAnonymousUserTest {
-
-    @Autowired
-    private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -54,6 +45,15 @@ public class AdsControllerAnonymousUserTest {
     @MockBean
     private AdsCommentsImpl adsCommentsService;
 
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    private MockMvc mockMvc;
+
+    @BeforeEach()
+    public void setup() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
 
     @Test
     public void testGetAllAdsEmpty() throws Exception {
@@ -78,7 +78,7 @@ public class AdsControllerAnonymousUserTest {
                                 .price(1)
                                 .description("description1")
                                 .pk(1)
-                        .build(),
+                                .build(),
                         AdsDto.builder()
                                 .author(2)
                                 .image("image")
@@ -86,7 +86,7 @@ public class AdsControllerAnonymousUserTest {
                                 .price(2)
                                 .description("description2")
                                 .pk(2)
-                        .build()
+                                .build()
                 )));
 
         mockMvc.perform(get("/ads"))
@@ -114,7 +114,7 @@ public class AdsControllerAnonymousUserTest {
 
     @Test
     public void testPostAddAds() throws Exception {
-        when( imageService.addImage(any())).thenReturn(new Image());
+        when(imageService.addImage(any())).thenReturn(new Image());
         when(adsService.addAds(any(), any())).thenReturn(AdsDto.builder()
                 .author(1)
                 .image("image")
@@ -124,36 +124,29 @@ public class AdsControllerAnonymousUserTest {
                 .pk(1)
                 .build()
         );
-//        when(adsService.getAdsMe())
-//                .thenReturn(new ResponseWrapperAds(Collections.emptyList()));
-        JSONObject body = new JSONObject();
-//        body.put("properties", CreateAds.builder()
-//                        .title("title")
-//                        .description("description")
-//                        .price(1)
-//                        .build());
-        body.put("title","title");
-        body.put("description","description");
-        body.put("price",1);
-//        body.put("file","abc");
+
+//        JSONObject body = new JSONObject();
+//        body.put("title", "title");
+//        body.put("description", "description");
+//        body.put("price", 1);
+//        MockMultipartFile properties = new MockMultipartFile("properties", "", "application/json",body.toString().getBytes());
 
         MockMultipartFile file = new MockMultipartFile("image", "test.jpeg", "text/plain", "image file content".getBytes());
-//        MockMultipartFile properties = new MockMultipartFile("properties", "", "application/json",body.toString().getBytes());
 
         MockMultipartFile properties = new MockMultipartFile("properties", "", "application/json",
                 objectMapper.writeValueAsString(
                         CreateAds.builder()
-                        .title("title")
-                        .description("description")
-                        .price(1)
-                        .build()
+                                .title("title")
+                                .description("description")
+                                .price(1)
+                                .build()
                 ).getBytes()
         );
 
         mockMvc.perform(MockMvcRequestBuilders
-                                .multipart("/ads")
-                                .file(file)
-                                .file(properties)
+                        .multipart("/ads")
+                        .file(file)
+                        .file(properties)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
