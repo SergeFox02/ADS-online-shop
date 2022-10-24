@@ -125,12 +125,6 @@ public class AdsControllerAnonymousUserTest {
                 .build()
         );
 
-//        JSONObject body = new JSONObject();
-//        body.put("title", "title");
-//        body.put("description", "description");
-//        body.put("price", 1);
-//        MockMultipartFile properties = new MockMultipartFile("properties", "", "application/json",body.toString().getBytes());
-
         MockMultipartFile file = new MockMultipartFile("image", "test.jpeg", "text/plain", "image file content".getBytes());
 
         MockMultipartFile properties = new MockMultipartFile("properties", "", "application/json",
@@ -155,22 +149,6 @@ public class AdsControllerAnonymousUserTest {
                 .andExpect(jsonPath("$.description").value("description1"))
                 .andExpect(jsonPath("$.image").value("image"))
                 .andExpect(jsonPath("$.price").value(1));
-
-
-        //        mockMvc.perform(post("/ads")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(body.toString())
-////                .content(objectMapper.writeValueAsString(CreateAds.builder()
-////                        .title("title")
-////                        .description("description")
-////                        .price(1)
-////                        .build()))
-////                .with(user("admin").password("pass").roles("USER","ADMIN"))
-//                )
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.count").value(0))
-//                .andExpect(jsonPath("$.results").isArray());
     }
 
 }
