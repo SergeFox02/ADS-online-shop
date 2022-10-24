@@ -2,7 +2,6 @@ package ru.skypro.homework.model.dto;
 
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 @Data
