@@ -1,16 +1,22 @@
-package ru.skypro.homework;
+package ru.skypro.homework.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import ru.skypro.homework.service.impl.UserServiceImpl;
+
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class WebSecurityConfig {
 
     private static final String[] AUTH_WHITELIST = {
@@ -18,7 +24,9 @@ public class WebSecurityConfig {
             "/swagger-ui.html",
             "/v3/api-docs",
             "/webjars/**",
-            "/login", "/register"
+            "/login",
+            "/register",
+            "/ads"
     };
 
     @Bean
@@ -32,20 +40,21 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .authorizeHttpRequests((authz) ->
-                        authz
-                                .mvcMatchers(AUTH_WHITELIST).permitAll()
-//                                .mvcMatchers("/ads/**", "/users/**").authenticated()
-
-                )
-                .cors().disable()
-                .httpBasic(withDefaults());
-        return http.build();
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
-
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http, UserServiceImpl userService) throws Exception {
+        return http
+                .csrf().disable()
+                .userDetailsService(userService)
+                .authorizeHttpRequests((authz) -> authz
+                        .mvcMatchers(AUTH_WHITELIST).permitAll()
+                        .mvcMatchers("/users/**", "ads/**").authenticated()
+                )
+                .cors().and()
+                .httpBasic(withDefaults())
+                .build();
+    }
 }
-

@@ -1,9 +1,8 @@
-package ru.skypro.homework.Model;
+package ru.skypro.homework.model.entity;
 
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -14,7 +13,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column
     private String email;
@@ -35,9 +34,11 @@ public class User implements UserDetails {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
     Collection<Ads> createdAds;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
     Collection<Comment> comments;
 
@@ -61,11 +62,11 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -152,11 +153,24 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return Objects.equals(getId(), user.getId()) && getEmail().equals(user.getEmail()) && getPhone().equals(user.getPhone()) && getRole() == user.getRole();
+        return Objects.equals(getId(), user.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getEmail(), getPhone(), getRole());
+        return Objects.hash(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", role=" + role +
+                '}';
     }
 }
