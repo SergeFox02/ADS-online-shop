@@ -14,4 +14,5 @@ public class ResponseWrapperAds {
         this.count = result.size();
         this.results = result;
     }
+
 }
