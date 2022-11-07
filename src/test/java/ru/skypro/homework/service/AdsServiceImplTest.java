@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import ru.skypro.homework.model.dto.AdsDto;
+import ru.skypro.homework.model.dto.ResponseWrapper;
 import ru.skypro.homework.model.dto.ResponseWrapperAds;
 import ru.skypro.homework.model.entity.Ads;
 import ru.skypro.homework.model.entity.Image;
@@ -59,7 +60,7 @@ public class AdsServiceImplTest {
                 )
         );
 
-        ResponseWrapperAds actual = adsService.getAllAds();
+        ResponseWrapper<AdsDto> actual = new ResponseWrapper<>(adsService.getAllAds());
 
 
         assertEquals(2, actual.getCount());

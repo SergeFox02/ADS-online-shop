@@ -4,9 +4,11 @@ import ru.skypro.homework.model.dto.*;
 import ru.skypro.homework.model.entity.Ads;
 import ru.skypro.homework.model.entity.Image;
 
+import java.util.Collection;
+
 public interface AdsService {
 
-    ResponseWrapperAds getAllAds();
+    Collection<AdsDto> getAllAds();
 
     ResponseWrapperAds getAdsMe();
 

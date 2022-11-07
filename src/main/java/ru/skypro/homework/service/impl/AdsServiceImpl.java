@@ -40,13 +40,12 @@ public class AdsServiceImpl implements AdsService {
      * @return all ads
      */
     @Override
-    public ResponseWrapperAds getAllAds() {
+    public Collection<AdsDto> getAllAds() {
         logger.info("Call getAllAds");
-        Collection<AdsDto> adsDtoCollection = adsRepository.findAll().stream()
+
+        return adsRepository.findAll().stream()
                 .map(adsMapper::toAdsDto)
                 .collect(Collectors.toList());
-
-        return new ResponseWrapperAds(adsDtoCollection);
     }
 
     /**

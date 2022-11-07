@@ -57,7 +57,7 @@ public class AdsController {
     public ResponseEntity<?> getAllAds(){
         logger.info("Call getAllAds");
 
-        return ResponseEntity.ok(adsService.getAllAds());
+        return ResponseEntity.ok(new ResponseWrapper<>(adsService.getAllAds()));
     }
 
     @Operation(

@@ -58,7 +58,7 @@ public class AdsControllerAnonymousUserTest {
     @Test
     public void testGetAllAdsEmpty() throws Exception {
         when(adsService.getAllAds())
-                .thenReturn(new ResponseWrapperAds(Collections.emptyList()));
+                .thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/ads"))
                 .andDo(print())
@@ -70,7 +70,7 @@ public class AdsControllerAnonymousUserTest {
     @Test
     public void testGetAllAdsNonEmpty() throws Exception {
         when(adsService.getAllAds())
-                .thenReturn(new ResponseWrapperAds(List.of(
+                .thenReturn(List.of(
                         AdsDto.builder()
                                 .author(1)
                                 .image("image")
@@ -87,7 +87,7 @@ public class AdsControllerAnonymousUserTest {
                                 .description("description2")
                                 .pk(2)
                                 .build()
-                )));
+                ));
 
         mockMvc.perform(get("/ads"))
                 .andDo(print())
