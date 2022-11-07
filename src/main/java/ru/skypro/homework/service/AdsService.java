@@ -16,7 +16,7 @@ public interface AdsService {
 
     AdsDto addAds(CreateAds ads, Image images);
 
-    ResponseWrapperAdsComment getAdsComments(int id);
+    Collection<AdsComment> getAdsComments(int id);
 
     Ads deleteAds(int id);
 

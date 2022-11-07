@@ -104,17 +104,16 @@ public class AdsServiceImpl implements AdsService {
      * @return comments of ads
      */
     @Override
-    public ResponseWrapperAdsComment getAdsComments(int adsId) {
+    public Collection<AdsComment> getAdsComments(int adsId) {
         logger.info("Call getAdsComments");
         if (adsRepository.findById(adsId).isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ads is not Found");
         }
-        Collection<AdsComment> commentDtoCollection = commentRepository.findAll().stream()
+
+        return commentRepository.findAll().stream()
                 .filter(c -> c.getAds().getId() == adsId)
                 .map(commentsMapper::toAdsComment)
                 .collect(Collectors.toList());
-
-        return new ResponseWrapperAdsComment(commentDtoCollection);
     }
 
     /**

@@ -175,7 +175,7 @@ public class AdsController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "OK",
-                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseWrapperAdsComment.class))
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseWrapper.class))
                     ),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
@@ -187,7 +187,7 @@ public class AdsController {
     public ResponseEntity<?> getAdsComments(@PathVariable Integer ad_pk){
         logger.info("Call getAdsComments");
 
-        return ResponseEntity.ok(adsService.getAdsComments(ad_pk));
+        return ResponseEntity.ok(new ResponseWrapper<>(adsService.getAdsComments(ad_pk)));
     }
 
     @Operation(
@@ -196,7 +196,7 @@ public class AdsController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "OK",
-                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseWrapperAdsComment.class))
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseWrapper.class))
                     ),
                     @ApiResponse(responseCode = "204", description = "No Content"),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
