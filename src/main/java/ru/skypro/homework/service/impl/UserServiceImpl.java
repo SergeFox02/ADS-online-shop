@@ -8,7 +8,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.model.dto.*;
@@ -16,11 +15,6 @@ import ru.skypro.homework.model.entity.User;
 import ru.skypro.homework.model.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UserService;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Service for working with Users
@@ -32,7 +26,6 @@ public class UserServiceImpl implements UserService {
 
     Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
-    private final PasswordEncoder encoder;
     private final UserMapper userMapper;
 
     @Override
@@ -41,56 +34,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
-    }
-
-    @Override
-    public User findUserById(int userId) {
-        return userRepository.findById(userId).orElse(new User());
-    }
-
-    @Override
-    public List<User> allUsers() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public boolean saveUser(User user) {
-        if (isPresent(user.getUsername())) {
-            return false;
-        } else {
-            user.setPassword(encoder.encode(user.getPassword()));
-            userRepository.saveAndFlush(user);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean deleteUser(int userId) {
-        if (userRepository.findById(userId).isPresent()) {
-            userRepository.deleteById(userId);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public boolean isPresent(String username) {
         return userRepository.findUserByEmail(username).isPresent();
-    }
-
-    /**
-     * Get all users
-     *
-     * @return all users
-     */
-    @Override
-    public ResponseWrapperUser getUsers() {
-        Collection<UserDto> userDtoCollection = userRepository.findAll().stream()
-                .map(userMapper::toUserDto)
-                .collect(Collectors.toList());
-        return new ResponseWrapperUser(userDtoCollection);
     }
 
     /**

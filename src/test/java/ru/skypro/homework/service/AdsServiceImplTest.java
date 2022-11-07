@@ -9,7 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import ru.skypro.homework.model.dto.AdsDto;
-import ru.skypro.homework.model.dto.ResponseWrapperAds;
+import ru.skypro.homework.model.dto.ResponseWrapper;
 import ru.skypro.homework.model.entity.Ads;
 import ru.skypro.homework.model.entity.Image;
 import ru.skypro.homework.model.entity.User;
@@ -59,7 +59,7 @@ public class AdsServiceImplTest {
                 )
         );
 
-        ResponseWrapperAds actual = adsService.getAllAds();
+        ResponseWrapper<AdsDto> actual = new ResponseWrapper<>(adsService.getAllAds());
 
 
         assertEquals(2, actual.getCount());
@@ -100,7 +100,7 @@ public class AdsServiceImplTest {
 
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user1, null, null));
 
-        ResponseWrapperAds actual = adsService.getAdsMe();
+        ResponseWrapper<AdsDto> actual = new ResponseWrapper<>(adsService.getAdsMe());
 
         assertEquals(1, actual.getCount());
         Iterator<AdsDto> ads = actual.getResults().iterator();

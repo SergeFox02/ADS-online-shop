@@ -40,13 +40,12 @@ public class AdsServiceImpl implements AdsService {
      * @return all ads
      */
     @Override
-    public ResponseWrapperAds getAllAds() {
+    public Collection<AdsDto> getAllAds() {
         logger.info("Call getAllAds");
-        Collection<AdsDto> adsDtoCollection = adsRepository.findAll().stream()
+
+        return adsRepository.findAll().stream()
                 .map(adsMapper::toAdsDto)
                 .collect(Collectors.toList());
-
-        return new ResponseWrapperAds(adsDtoCollection);
     }
 
     /**
@@ -55,15 +54,14 @@ public class AdsServiceImpl implements AdsService {
      * @return all ads of user
      */
     @Override
-    public ResponseWrapperAds getAdsMe() {
+    public Collection<AdsDto> getAdsMe() {
         logger.info("Call getAdsMe");
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Collection<AdsDto> adsDtoCollection = adsRepository.findAll().stream()
+
+        return adsRepository.findAll().stream()
                 .filter(ads -> Objects.equals(ads.getAuthor().getId(), user.getId()))
                 .map(adsMapper::toAdsDto)
                 .collect(Collectors.toList());
-
-        return new ResponseWrapperAds(adsDtoCollection);
     }
 
     /**
@@ -106,17 +104,16 @@ public class AdsServiceImpl implements AdsService {
      * @return comments of ads
      */
     @Override
-    public ResponseWrapperAdsComment getAdsComments(int adsId) {
+    public Collection<AdsComment> getAdsComments(int adsId) {
         logger.info("Call getAdsComments");
         if (adsRepository.findById(adsId).isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ads is not Found");
         }
-        Collection<AdsComment> commentDtoCollection = commentRepository.findAll().stream()
+
+        return commentRepository.findAll().stream()
                 .filter(c -> c.getAds().getId() == adsId)
                 .map(commentsMapper::toAdsComment)
                 .collect(Collectors.toList());
-
-        return new ResponseWrapperAdsComment(commentDtoCollection);
     }
 
     /**
