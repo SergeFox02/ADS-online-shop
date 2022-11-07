@@ -54,15 +54,14 @@ public class AdsServiceImpl implements AdsService {
      * @return all ads of user
      */
     @Override
-    public ResponseWrapperAds getAdsMe() {
+    public Collection<AdsDto> getAdsMe() {
         logger.info("Call getAdsMe");
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Collection<AdsDto> adsDtoCollection = adsRepository.findAll().stream()
+
+        return adsRepository.findAll().stream()
                 .filter(ads -> Objects.equals(ads.getAuthor().getId(), user.getId()))
                 .map(adsMapper::toAdsDto)
                 .collect(Collectors.toList());
-
-        return new ResponseWrapperAds(adsDtoCollection);
     }
 
     /**

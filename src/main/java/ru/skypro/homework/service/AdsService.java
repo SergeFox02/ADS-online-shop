@@ -10,7 +10,7 @@ public interface AdsService {
 
     Collection<AdsDto> getAllAds();
 
-    ResponseWrapperAds getAdsMe();
+    Collection<AdsDto> getAdsMe();
 
     FullAds getFullAds(int id);
 
