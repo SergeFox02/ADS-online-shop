@@ -19,7 +19,9 @@ import ru.skypro.homework.service.impl.AdsCommentsImpl;
 import ru.skypro.homework.service.impl.AdsServiceImpl;
 import ru.skypro.homework.service.impl.ImageServiceImpl;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -48,6 +50,7 @@ public class AdsControllerAnonymousUserTest {
     private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
+    private final static Collection<AdsDto> ADS_DTO = new LinkedList<>();
 
     @BeforeEach()
     public void setup() {
@@ -101,14 +104,12 @@ public class AdsControllerAnonymousUserTest {
 
     @Test
     public void testGetAdsMe() throws Exception {
-        when(adsService.getAdsMe())
-                .thenReturn(Collections.emptyList());
+        when(adsService.getAdsMe()).thenReturn(ADS_DTO);
 
         mockMvc.perform(get("/ads/me"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.count").value(0))
-                .andExpect(jsonPath("$.results").isArray());
+                .andExpect(jsonPath("$").value(ADS_DTO));
     }
 
     @Test
