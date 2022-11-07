@@ -14,7 +14,6 @@ import org.springframework.web.context.WebApplicationContext;
 import ru.skypro.homework.controller.AdsController;
 import ru.skypro.homework.model.dto.AdsDto;
 import ru.skypro.homework.model.dto.CreateAds;
-import ru.skypro.homework.model.dto.ResponseWrapperAds;
 import ru.skypro.homework.model.entity.Image;
 import ru.skypro.homework.service.impl.AdsCommentsImpl;
 import ru.skypro.homework.service.impl.AdsServiceImpl;
@@ -58,7 +57,7 @@ public class AdsControllerAnonymousUserTest {
     @Test
     public void testGetAllAdsEmpty() throws Exception {
         when(adsService.getAllAds())
-                .thenReturn(new ResponseWrapperAds(Collections.emptyList()));
+                .thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/ads"))
                 .andDo(print())
@@ -70,7 +69,7 @@ public class AdsControllerAnonymousUserTest {
     @Test
     public void testGetAllAdsNonEmpty() throws Exception {
         when(adsService.getAllAds())
-                .thenReturn(new ResponseWrapperAds(List.of(
+                .thenReturn(List.of(
                         AdsDto.builder()
                                 .author(1)
                                 .image("image")
@@ -87,7 +86,7 @@ public class AdsControllerAnonymousUserTest {
                                 .description("description2")
                                 .pk(2)
                                 .build()
-                )));
+                ));
 
         mockMvc.perform(get("/ads"))
                 .andDo(print())
@@ -103,7 +102,7 @@ public class AdsControllerAnonymousUserTest {
     @Test
     public void testGetAdsMe() throws Exception {
         when(adsService.getAdsMe())
-                .thenReturn(new ResponseWrapperAds(Collections.emptyList()));
+                .thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/ads/me"))
                 .andDo(print())
